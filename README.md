@@ -51,29 +51,43 @@ For `kubectl`, don't enable *Docker for Mac*'s k8s option before installing *Min
 ### Languages and Prezto
 
 ```bash
-$ ./mac/02_setup
+$ ./mac/02_asdf
 ```
 
-|                           name                           |                usage                |
-|:--------------------------------------------------------:|:-----------------------------------:|
-|        [anyenv](https://github.com/anyenv/anyenv)        |        All in one for ** env        |
-|         [rbenv](https://github.com/rbenv/rbenv)          |        Ruby version manager         |
-|      [bundler](https://github.com/bundler/bundler)       |       Bundler for gem locally       |
-|        [nodenv](https://github.com/nodenv/nodenv)        |       Node.js version manager       |
-|    [prezto](https://github.com/sorin-ionescu/prezto)     | The configuration framework for Zsh |
-| [powerlevel9k](https://github.com/bhilburn/powerlevel9k) |   Zsh theme with Powerline Fonts    |
+```bash
+$ ./mac/03_setup
+```
 
-<!-- - [anyenv](https://github.com/anyenv/anyenv) - All in one for **env
-- [rbenv](https://github.com/rbenv/rbenv) - Ruby version manager
-- [bundler](https://github.com/bundler/bundler) - Bundler for gem locally
-- [nodenv](https://github.com/nodenv/nodenv) - Node.js version manager
-- [prezto](https://github.com/sorin-ionescu/prezto) - The configuration framework for Zsh
-- [powerlevel9k](https://github.com/bhilburn/powerlevel9k) - Zsh theme with Powerline Fonts -->
+|                       name                        |                usage                |
+|:-------------------------------------------------:|:-----------------------------------:|
+|      [asdf](https://github.com/asdf-vm/asdf)      |  Manage multiple runtime versions   |
+| [prezto](https://github.com/sorin-ionescu/prezto) | The configuration framework for Zsh |
+
+Note: https://github.com/asdf-vm/asdf-nodejs
+
+
+### Zsh
+
+```bash
+$ sudo vi /etc/shells
+# List of acceptable shells for chpass(1).
+# Ftpd will not allow users to connect who are not using
+# one of these shells.
+
+/bin/bash
+/bin/csh
+/bin/ksh
+/bin/sh
+/bin/tcsh
+/bin/zsh
+/usr/local/bin/zsh # Add this
+
+$ chsh -s /usr/local/bin/zsh
+```
 
 
 ### iTerm2
 
-- zsh `/usr/local/bin/zsh`
 - [color](https://github.com/wesbos/Cobalt2-iterm)
 - [font](https://github.com/powerline/fonts)
 
