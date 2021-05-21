@@ -23,7 +23,7 @@ sleep 0.5
 if type virtualbox > /dev/null 2>&1; then
     echo "Virtualbox is already installed"
 else
-    brew cask install virtualbox
+    brew install --cask virtualbox
 fi
 brew bundle --file=$BREW_PATH
 

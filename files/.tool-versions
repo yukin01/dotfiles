@@ -1,6 +1,6 @@
 kubectl 1.16.15
 kubectx 0.9.0
-terraform 0.14.3
+terraform 0.14.5
 tflint 0.17.0
 ruby 2.7.1
-nodejs 12.18.2
+nodejs 14.15.3
