@@ -98,9 +98,11 @@ $ chsh -s /usr/local/bin/zsh
 - Keyboard Settings
   - Google Japanese IME
   - Disable smart quotes and auto correction
+  - Swap CapsLock and Ctrl
 - VSCode Settings Sync
 - Google Chrome login
-- `hub api user`
+- `gh api user`
+
 
 ## Ubuntu
 
