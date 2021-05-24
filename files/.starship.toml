@@ -36,15 +36,11 @@ format = """\
   """
 
 [aws]
-displayed_items = "profile"
-
-[character]
-use_symbol_for_status = true
 
 [directory]
 truncation_length = 5
 
 [kubernetes]
-#symbol = "⎈ "
+# symbol = "⎈ "
 symbol = "🐳 "
 disabled = false
