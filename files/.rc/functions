@@ -1,41 +1,4 @@
-# echo "This is envrc"
-
-# fzf option
-export FZF_DEFAULT_OPTS='--height 40% --reverse --border'
-
-# BuildKit option
-export DOCKER_BUILDKIT=1
-export COMPOSE_DOCKER_CLI_BUILD=1
-
-# go path
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin
-
-# krew path
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-
-# yarn for ubuntu
-if [ "$(uname)" = "Linux" ]; then
-  export PATH=$HOME/.yarn/bin:$PATH
-fi
-
-# alias
-alias brewdump='brew bundle dump --force --file ~/dotfiles/Brewfile'
-alias brewcleanup='brew bundle --cleanup --file ~/dotfiles/Brewfile'
-alias rm='rm -i'
-alias mv='mv -i'
-alias cp='cp -i'
-alias ..='cd ..'
-alias k='kubectl'
-alias a='aws-vault'
-alias c='clear'
-alias dotfiles='tmux attach -c ~/dotfiles -t dotfiles || tmux new -c ~/dotfiles -s dotfiles \; source-file ~/.tmux/dotfiles.conf'
-
-# custom commands
-export PATH=$HOME/dotfiles/bin:$PATH
-
-# custom functions
-
+# vim:filetype=sh
 function curlp() {
   while :; do curl -LI $1 -o /dev/null -w '%{http_code}\n' -s; sleep 3; done
 }
@@ -94,5 +57,9 @@ function __get_github_repo() {
   echo $repo
 }
 
-# scripts for business
-[ -f $HOME/scripts-for-business/files/.envrc ] && source $HOME/scripts-for-business/files/.envrc
+# Change default branch from master to main
+function github-main() {
+  git branch -m master main
+  git branch -u origin/main main
+  git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
+}

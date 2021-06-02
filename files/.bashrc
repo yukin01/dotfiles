@@ -1,19 +1,23 @@
-# echo "this is bashrc"
-
-# for anyenv
-if [ -d $HOME/.anyenv ]; then
-    export PATH=$HOME/.anyenv/bin:$PATH
-    eval "$(anyenv init - bash)"
-fi
-
 # for asdf
 if [ -d $HOME/.asdf ]; then
   source $HOME/.asdf/asdf.sh
   source $HOME/.asdf/completions/asdf.bash
 fi
 
-# Set alies
-[ -f ~/.envrc ] && . ~/.envrc
+# for direnv
+if type direnv > /dev/null 2>&1; then
+  eval "$(direnv hook bash)"
+fi
+
+# Set common rc
+if [ -d $HOME/.rc ]; then
+  source $HOME/.rc/exports
+  source $HOME/.rc/aliases
+  source $HOME/.rc/functions
+fi
+
+# scripts for business
+[ -f $HOME/scripts-for-business/files/.envrc ] && source $HOME/scripts-for-business/files/.envrc
 
 # set vi keybind
 set -o vi

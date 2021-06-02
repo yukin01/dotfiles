@@ -1,0 +1,12 @@
+# vim:filetype=sh
+alias brewdump='brew bundle dump --force --file ~/dotfiles/Brewfile'
+alias brewbundle='brew bundle --file ~/dotfiles/Brewfile'
+alias brewcleanup='brew bundle --cleanup --file ~/dotfiles/Brewfile'
+alias rm='rm -i'
+alias mv='mv -i'
+alias cp='cp -i'
+alias ..='cd ..'
+alias k='kubectl'
+alias a='aws-vault'
+alias c='clear'
+alias dotfiles='tmux attach -c ~/dotfiles -t dotfiles || tmux new -c ~/dotfiles -s dotfiles \; source-file ~/.tmux/dotfiles.conf'
