@@ -63,3 +63,8 @@ function github-main() {
   git branch -u origin/main main
   git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
 }
+
+function brew-formulae-usage() {
+  brew list --formulae | xargs -P`expr $(sysctl -n hw.ncpu) - 1` -I{} \
+    sh -c 'brew uses --installed {} | wc -l | xargs printf "%20s is used by %2d formulae.\n" {}'
+}
