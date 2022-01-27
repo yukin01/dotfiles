@@ -16,6 +16,9 @@ export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 # yarn for ubuntu
 if [[ "$(uname)" == "Linux" ]]; then
   export PATH=$HOME/.yarn/bin:$PATH
+else
+  # yarn config set prefix ~/.config/yarn/global されていない場合はする
+  export PATH=$(yarn global bin):$PATH
 fi
 
 # custom commands
