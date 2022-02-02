@@ -1,4 +1,5 @@
 add_newline = false
+command_timeout = 1000
 format = """\
   $username\
   $hostname\
@@ -41,6 +42,8 @@ format = """\
 truncation_length = 5
 
 [kubernetes]
-# symbol = "⎈ "
 symbol = "🐳 "
 disabled = false
+
+[terraform]
+format = "via [$symbol$version]($style) "

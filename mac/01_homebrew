@@ -10,6 +10,7 @@ sleep 0.5
 if type brew > /dev/null 2>&1; then
     echo "already installed"
 else
+    xcode-select --install
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 fi
 brew doctor

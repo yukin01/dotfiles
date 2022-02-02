@@ -28,10 +28,19 @@ if type direnv > /dev/null 2>&1; then
   eval "$(direnv hook zsh)"
 fi
 
+# for tfswitch hook
+load-tfswitch() {
+  local tfswitchrc_path="providers.tf"
+
+  if [ -f "$tfswitchrc_path" ]; then
+    tfswitch
+  fi
+}
+add-zsh-hook chpwd load-tfswitch
+load-tfswitch
+
 # for gcloud on macos
-if type brew > /dev/null 2>&1; then
-  export CLOUDSDK_PYTHON="$(brew --prefix)/opt/python@3.8/libexec/bin/python"
-  source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
+if type brew > /dev/null 2>&1 && type gcloud > /dev/null 2>&1; then
   source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
 fi
 
@@ -45,9 +54,9 @@ fi
 # fi
 
 # for aws-vault completion
-# if type aws-vault >/dev/null 2>&1; then
-#   eval "$(aws-vault --completion-script-zsh)"
-# fi
+if type aws-vault >/dev/null 2>&1; then
+  eval "$(aws-vault --completion-script-zsh)"
+fi
 
 # for additional zsh completions
 # fpath=($HOME/dotfiles/completions/zsh $fpath)

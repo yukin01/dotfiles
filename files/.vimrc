@@ -18,14 +18,11 @@ augroup END
 call plug#begin('~/.vim/plugged')
 
 " On-demand loading
-" Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'scrooloose/nerdtree' | Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'hashivim/vim-terraform'
-" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'cespare/vim-toml'
@@ -91,7 +88,7 @@ augroup auto_nerdtree
 augroup END
 
 " NERDTree で git の状態を表示
-let g:NERDTreeIndicatorMapCustom = {
+let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ "Modified"  : "M",
     \ "Staged"    : "S",
     \ "Untracked" : "U",
