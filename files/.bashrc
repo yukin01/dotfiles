@@ -23,6 +23,7 @@ fi
 set -o vi
 
 # fzf bash completion and key-bindings
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 # colorize
 if [ $UID -eq 0 ]; then

@@ -63,17 +63,13 @@ fi
 # autoload -Uz compinit && compinit
 
 # for fzf zsh completion and key-bindings
-function () {
-  local fzf_mac_dir="/usr/local/opt/fzf/shell"
-  local fzf_ubuntu_dir="/usr/share/doc/fzf/examples"
-  for dir in $fzf_mac_dir $fzf_ubuntu_dir; do
-    # [ -f $dir/completion.zsh ] && source $dir/completion.zsh
-    [ -f $dir/key-bindings.zsh ] && source $dir/key-bindings.zsh
-  done
-}
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# autoload only once
-# autoload -U compinit && compinit
+# generate fzf configuration file
+if [ ! -f ~/.fzf.zsh ] && type brew > /dev/null 2>&1; then
+  $(brew --prefix)/opt/fzf/install \
+    --key-bindings --no-completion --no-update-rc
+fi
 
 # Set common rc
 if [ -d $HOME/.rc ]; then
