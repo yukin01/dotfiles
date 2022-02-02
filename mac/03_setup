@@ -38,3 +38,9 @@ else
 fi
 
 echo "Set up your macOS successfully"
+
+# setup fzf
+if has brew; then
+  $(brew --prefix)/opt/fzf/install \
+    --key-bindings --no-completion --no-update-rc
+fi

@@ -62,15 +62,6 @@ fi
 # fpath=($HOME/dotfiles/completions/zsh $fpath)
 # autoload -Uz compinit && compinit
 
-# for fzf zsh completion and key-bindings
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# generate fzf configuration file
-if [ ! -f ~/.fzf.zsh ] && type brew > /dev/null 2>&1; then
-  $(brew --prefix)/opt/fzf/install \
-    --key-bindings --no-completion --no-update-rc
-fi
-
 # Set common rc
 if [ -d $HOME/.rc ]; then
   source $HOME/.rc/exports
@@ -83,6 +74,10 @@ fi
 
 # Set vi keybind
 bindkey -v
+
+# for fzf key-bindings
+# this should be sourced after `bindkey -v`
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Profiling
 if (which zprof > /dev/null 2>&1) ;then
