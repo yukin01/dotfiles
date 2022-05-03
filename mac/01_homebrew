@@ -1,5 +1,10 @@
 #!/bin/bash
 set -eu
+
+function has() {
+  type "$1" &>/dev/null
+}
+
 BREW_PATH="$HOME/dotfiles/Brewfile"
 
 echo ""
@@ -7,11 +12,14 @@ echo "===== Install homebrew ====="
 echo ""
 
 sleep 0.5
-if type brew > /dev/null 2>&1; then
-    echo "already installed"
-else
-    xcode-select --install
+if has "brew"; then
+    echo "Already installed."
+elif has "git" && has "curl"; then
+    # xcode-select --install
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+else
+  echo "Please install git and curl." 1>&2
+  exit 1
 fi
 brew doctor
 
@@ -21,13 +29,13 @@ echo ""
 
 sleep 0.5
 # virtualbox で躓くことがあるので先にインストールしておく
-if type virtualbox > /dev/null 2>&1; then
-    echo "Virtualbox is already installed"
-else
-    brew install --cask virtualbox
-fi
-brew bundle --file=$BREW_PATH
+# if type virtualbox > /dev/null 2>&1; then
+#     echo "Virtualbox is already installed."
+# else
+#     brew install --cask virtualbox
+# fi
+brew bundle --file="${BREW_PATH}"
 
 echo ""
-echo "Installed homebrew and packages successfully!"
+echo "Homebrew and packages are installed successfully."
 echo ""

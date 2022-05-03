@@ -2,13 +2,12 @@
 set -eu
 
 OS=""
-if [ "$(uname)" == "Darwin" ]; then
+if [[ "$(uname)" == "Darwin" ]]; then
   OS="Mac"
-elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ] && \
-     [ -f /etc/lsb-release ]; then
-  OS="Ubuntu"
+elif [[ "$(uname)" == "Linux" ]]; then
+  OS="Linux"
 else
-  echo Unsupported OS
+  echo "Unsupported OS" 1>&2
   exit 1
 fi
 
@@ -21,7 +20,7 @@ echo ===== Make SSH directory =====
 echo
 
 if [ -d ~/.ssh ]; then
-  echo SSH directory already exists.
+  echo "SSH directory already exists."
 else
   set -x
   install -m 700 -d ~/.ssh
@@ -54,11 +53,11 @@ EOS
 )
 
 if [ -f ~/.ssh/config ]; then
-  echo SSh config file already exists.
-  echo If you need common settings, add manually.
+  echo "SSH config file already exists."
+  echo "If you need common settings, add manually."
 else
   set -x
-  echo "$SSH_CONFIG" > ~/.ssh/config
+  echo "${SSH_CONFIG}" > ~/.ssh/config
   [ $OS == "Mac" ] && echo "  UseKeychain yes" >> ~/.ssh/config
   set +x
 fi
@@ -68,43 +67,43 @@ echo ===== Generate SSH key =====
 echo
 
 if [ -f ~/.ssh/id_rsa ] && [ -f ~/.ssh/id_rsa.pub ]; then
-  echo SSH key pair already exists.
+  echo "SSH key pair already exists."
 else
-  read -p "Enter your email address: " email
+  read -r -p "Enter your email address: " email
   set -x
-  ssh-keygen -t rsa -b 4096 -C $email
+  ssh-keygen -t rsa -b 4096 -C "${email}"
   set +x
   echo
   echo Your public key is...
   echo
   cat ~/.ssh/id_rsa.pub
   echo
-  read -p "After registering public key, press the enter key: "
+  read -r -p "After registering public key, press the enter key: "
 fi
 
 echo
 echo ===== Set git remote repository =====
 echo
 
-type git > /dev/null 2>&1 || (echo Please install git && exit 1)
+type git > /dev/null 2>&1 || (echo "Please install git" && exit 1)
 
 git_name=$(git config --global --get user.name || echo "")
 git_email=$(git config --global --get user.email || echo "")
 
-if [ -z $git_name ]; then
+if [ -z "${git_name}" ]; then
   default_git_name="yukin01"
-  read -p "Enter your name ($default_git_name): " git_name
-  git config --global user.name ${git_name:=$default_git_name}
+  read -r -p "Enter your name (${default_git_name}): " git_name
+  git config --global user.name "${git_name:=$default_git_name}"
 fi
-echo Your git user name is $git_name
+echo "Your git user name is ${git_name}"
 echo
 
-if [ -z $git_email ]; then
+if [ -z "${git_email}" ]; then
   default_git_email="38382781+yukin01@users.noreply.github.com"
-  read -p "Enter your email address ($default_git_email): " git_email
-  git config --global user.email ${git_email:=$default_git_email}
+  read -r -p "Enter your email address (${default_git_email}): " git_email
+  git config --global user.email "${git_email:=$default_git_email}"
 fi
-echo Your git user email is $git_email
+echo "Your git user email is ${git_email}"
 echo
 
 if [ -d ~/dotfiles ]; then
@@ -117,5 +116,5 @@ if [ -d ~/dotfiles ]; then
 fi
 
 echo
-echo SSH configuration is are completed successfully!
+echo "Git with ssh is configured successfully."
 echo

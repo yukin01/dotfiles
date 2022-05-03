@@ -2,17 +2,13 @@
 set -eu
 
 function has() {
-  if [ $# -eq 2 ]; then
-    type $1 | grep $2 > /dev/null 2>&1
-  else
-    type $1 > /dev/null 2>&1
-  fi
+  type "$1" &>/dev/null
 }
 
 # prezto
 echo "===== Install prezto ====="
 sleep 0.5
-if [ -d ${ZDOTDIR:-$HOME}/.zprezto ]; then
+if [ -d "${ZDOTDIR:-$HOME}/.zprezto" ]; then
   echo "already installed"
   echo ""
 else
@@ -39,8 +35,8 @@ fi
 
 # setup fzf
 echo "===== Install fzf settings ====="
-if has brew && has fzf ; then
-  $(brew --prefix)/opt/fzf/install \
+if has "brew" && has "fzf" ; then
+  "$(brew --prefix)"/opt/fzf/install \
     --key-bindings --no-completion --no-update-rc
 
   echo ""
