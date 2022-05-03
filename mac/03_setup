@@ -19,7 +19,7 @@ else
   # prezto
   git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
   echo ""
-  echo "Prezto is installed successfully"
+  echo "Prezto is installed successfully."
   echo ""
 
 fi
@@ -33,14 +33,19 @@ if find ~/Library/Fonts -name "Ubuntu*" >/dev/null 2>&1; then
 else
   ~/dotfiles/fonts/install.sh
   echo ""
-  echo "Powerline fonts are installed successfully"
+  echo "Powerline fonts are installed successfully."
   echo ""
 fi
 
-echo "Set up your macOS successfully"
-
 # setup fzf
-if has brew; then
+echo "===== Install fzf settings ====="
+if has brew && has fzf ; then
   $(brew --prefix)/opt/fzf/install \
     --key-bindings --no-completion --no-update-rc
+
+  echo ""
+  echo "FZF is configured successfully."
+  echo ""
 fi
+
+echo "Set up your macOS successfully."
