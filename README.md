@@ -7,6 +7,11 @@ My environment for MacOS and Ubuntu
 
 Install *Xcode* from *App Store* and launch once.
 
+or
+
+```
+$ xcode-select --install
+```
 
 ### Installation
 
