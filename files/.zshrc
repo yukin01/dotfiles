@@ -1,53 +1,55 @@
-# Source Prezto.
+function has() {
+  type "$1" &>/dev/null
+}
+
+# Source Prezto
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
 # Setup starship
-if type starship >/dev/null 2>&1; then
+if has "starship"; then
   export STARSHIP_CONFIG=$HOME/.starship.toml
   eval "$(starship init zsh)"
 fi
 
-# for asdf
-if [ -d $HOME/.asdf ]; then
-  source $HOME/.asdf/asdf.sh
+# For asdf
+if [[ -d "$HOME/.asdf" ]]; then
+  source "$HOME/.asdf/asdf.sh"
   fpath=(${ASDF_DIR}/completions $fpath)
   autoload -Uz compinit && compinit
 fi
 
-# for direnv
-if type direnv > /dev/null 2>&1; then
+# For direnv
+if has "direnv"; then
   eval "$(direnv hook zsh)"
 fi
 
-# for tfswitch hook
+# For tfswitch hook
 load-tfswitch() {
   local tfswitchrc_path="providers.tf"
 
-  if [ -f "$tfswitchrc_path" ]; then
+  if [[ -f "${tfswitchrc_path}" ]]; then
     tfswitch
   fi
 }
 add-zsh-hook chpwd load-tfswitch
 load-tfswitch
 
-# for gcloud on macos
-if type brew > /dev/null 2>&1 && type gcloud > /dev/null 2>&1; then
-  source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
+# For gcloud completion on macos
+if has "brew" && has "gcloud" 2>&1; then
+  # source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
+  source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
 fi
 
 # for kubectl completion
-# type kubectl &>/dev/null && source <(kubectl completion zsh)
+# NOTE: this has been moved to `.rc/functions`.
 
 # for awscli completion
-# if type aws_completer &>/dev/null; then
-#   complete -C aws_completer aws
-#   complete -C aws_completer aws-vault
-# fi
+# NOTE: https://github.com/Homebrew/homebrew-core/blob/6798763743df1ad3fe256aa27b39807ab690437a/Formula/awscli.rb#L117-L125
 
 # for aws-vault completion
-if type aws-vault >/dev/null 2>&1; then
+if has "aws-vault"; then
   eval "$(aws-vault --completion-script-zsh)"
 fi
 
@@ -56,23 +58,23 @@ fi
 # autoload -Uz compinit && compinit
 
 # Set common rc
-if [ -d $HOME/.rc ]; then
-  source $HOME/.rc/exports
-  source $HOME/.rc/aliases
-  source $HOME/.rc/functions
+if [[ -d ~/.rc ]]; then
+  source ~/.rc/exports
+  source ~/.rc/aliases
+  source ~/.rc/functions
 fi
 
 # scripts for business
-[ -f $HOME/scripts-for-business/files/.envrc ] && source $HOME/scripts-for-business/files/.envrc
+[[ -f ~/scripts-for-business/files/.envrc ]] && source ~/scripts-for-business/files/.envrc
 
 # Set vi keybind
 bindkey -v
 
 # for fzf key-bindings
 # this should be sourced after `bindkey -v`
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
 
 # Profiling
-if (which zprof > /dev/null 2>&1) ;then
+if has "zprof"; then
   zprof | less
 fi

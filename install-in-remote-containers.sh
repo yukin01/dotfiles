@@ -17,6 +17,6 @@ for f in .??*; do
   ln -snfv "${DOTFILES_DIR}/$f" "$HOME/$f"
 done
 
-echo
-echo Dotfiles installation is completed successfully!
-echo
+echo ""
+echo "Dotfiles are installed successfully."
+echo ""

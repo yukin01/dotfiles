@@ -1,7 +1,7 @@
 # for asdf
-if [ -d $HOME/.asdf ]; then
-  source $HOME/.asdf/asdf.sh
-  source $HOME/.asdf/completions/asdf.bash
+if [ -d ~/.asdf ]; then
+  source ~/.asdf/asdf.sh
+  source ~/.asdf/completions/asdf.bash
 fi
 
 # for direnv
@@ -10,14 +10,14 @@ if type direnv > /dev/null 2>&1; then
 fi
 
 # Set common rc
-if [ -d $HOME/.rc ]; then
-  source $HOME/.rc/exports
-  source $HOME/.rc/aliases
-  source $HOME/.rc/functions
+if [ -d ~/.rc ]; then
+  source ~/.rc/exports
+  source ~/.rc/aliases
+  source ~/.rc/functions
 fi
 
 # scripts for business
-[ -f $HOME/scripts-for-business/files/.envrc ] && source $HOME/scripts-for-business/files/.envrc
+[ -f ~/scripts-for-business/files/.envrc ] && source ~/scripts-for-business/files/.envrc
 
 # set vi keybind
 set -o vi

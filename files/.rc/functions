@@ -68,3 +68,11 @@ function brew-formulae-usage() {
   brew list --formulae | xargs -P`expr $(sysctl -n hw.ncpu) - 1` -I{} \
     sh -c 'brew uses --installed {} | wc -l | xargs printf "%20s is used by %2d formulae.\n" {}'
 }
+
+function kubectl() {
+  unset -f kubectl
+  # lazy load
+  source <(kubectl completion "${SHELL##*/}")
+  echo "kubectl completion has been loaded."
+  [[ "$#" -eq 0 ]] || kubectl "$@"
+}

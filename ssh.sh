@@ -11,13 +11,13 @@ else
   exit 1
 fi
 
-echo ---------------------------
-echo Installation type is $OS
-echo ---------------------------
+echo "---------------------------"
+echo "Installation type is ${OS} "
+echo "---------------------------"
 
-echo
-echo ===== Make SSH directory =====
-echo
+echo ""
+echo "===== Make SSH directory ====="
+echo ""
 
 if [ -d ~/.ssh ]; then
   echo "SSH directory already exists."
@@ -34,9 +34,9 @@ if [ ! -d ~/.ssh/conf.d ]; then
   set +x
 fi
 
-echo
-echo ===== Make SSH config file =====
-echo
+echo ""
+echo "===== Make SSH config file ====="
+echo ""
 
 SSH_CONFIG=$(cat <<-EOS
 Include conf.d/*
@@ -62,9 +62,9 @@ else
   set +x
 fi
 
-echo
-echo ===== Generate SSH key =====
-echo
+echo ""
+echo "===== Generate SSH key ====="
+echo ""
 
 if [ -f ~/.ssh/id_rsa ] && [ -f ~/.ssh/id_rsa.pub ]; then
   echo "SSH key pair already exists."
@@ -73,17 +73,17 @@ else
   set -x
   ssh-keygen -t rsa -b 4096 -C "${email}"
   set +x
-  echo
-  echo Your public key is...
-  echo
+  echo ""
+  echo "Your public key is..."
+  echo ""
   cat ~/.ssh/id_rsa.pub
   echo
   read -r -p "After registering public key, press the enter key: "
 fi
 
-echo
-echo ===== Set git remote repository =====
-echo
+echo ""
+echo "===== Set git remote repository ====="
+echo ""
 
 type git > /dev/null 2>&1 || (echo "Please install git" && exit 1)
 
@@ -96,7 +96,7 @@ if [ -z "${git_name}" ]; then
   git config --global user.name "${git_name:=$default_git_name}"
 fi
 echo "Your git user name is ${git_name}"
-echo
+echo ""
 
 if [ -z "${git_email}" ]; then
   default_git_email="38382781+yukin01@users.noreply.github.com"
@@ -104,7 +104,7 @@ if [ -z "${git_email}" ]; then
   git config --global user.email "${git_email:=$default_git_email}"
 fi
 echo "Your git user email is ${git_email}"
-echo
+echo ""
 
 if [ -d ~/dotfiles ]; then
   cd ~/dotfiles
@@ -115,6 +115,6 @@ if [ -d ~/dotfiles ]; then
   set +x
 fi
 
-echo
+echo ""
 echo "Git with ssh is configured successfully."
-echo
+echo ""

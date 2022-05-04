@@ -12,7 +12,7 @@ else
 fi
 
 echo "---------------------------"
-echo "Installation type is ${OS}   "
+echo "Installation type is ${OS} "
 echo "---------------------------"
 
 echo ""
@@ -20,6 +20,7 @@ echo "===== Clone dotfiles repository ====="
 echo ""
 
 type git > /dev/null 2>&1 || (echo "Please install git." && exit 1)
+
 if [ -d "$HOME/dotfiles" ]; then
   echo "Dotfiles repository already exists."
 else
@@ -47,5 +48,5 @@ else
 fi
 
 echo
-echo "Dotfiles is installed successfully."
+echo "Dotfiles are installed successfully."
 echo
