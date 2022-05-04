@@ -6,20 +6,25 @@ function has() {
 }
 
 # asdf
+echo ""
 echo "===== Install asdf ====="
+echo ""
 sleep 0.5
-if [ -d "$HOME/.asdf" ]; then
+if [[ -d "$HOME/.asdf" ]]; then
   echo "Already installed."
-  echo ""
 else
   git clone https://github.com/asdf-vm/asdf.git "$HOME/.asdf" --branch v0.10.0
-  # shellcheck source=/dev/null
-  source "$HOME/.asdf/asdf.sh"
 fi
 
-if has "asdf" && has "asdf-install"; then
-  asdf-install
+# shellcheck source=/dev/null
+has "asdf" || source "$HOME/.asdf/asdf.sh"
+
+echo ""
+echo "===== Install asdf plugins ====="
+echo ""
+if has "asdf-plugin-install"; then
+  asdf-plugin-install
 else
-  export PATH=$HOME/.asdf/bin:$HOME/dotfiles/bin:$PATH
-  asdf-install
+  $HOME/dotfiles/bin/asdf-plugin-install
 fi
+asdf install

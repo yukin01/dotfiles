@@ -1,0 +1,32 @@
+#!/bin/bash
+set -eu
+
+function has() {
+  type "$1" &>/dev/null
+}
+
+function contains() {
+  echo "$1" | grep -x "$2" &>/dev/null
+}
+
+function install_plugins() {
+  local installed_plugins=$(asdf plugin list)
+
+  for plugin in $(awk '{print $1}' ~/.tool-versions); do
+    if ! contains "$installed_plugins" "$plugin"; then
+      set -x
+      asdf plugin add "$plugin"
+      { set +x; } 2>/dev/null
+      if [[ $plugin == "nodejs" ]]; then
+        bash -c '${ASDF_DATA_DIR:=$HOME/.asdf}/plugins/nodejs/bin/import-release-team-keyring'
+      fi
+    fi
+  done
+}
+
+if ! has "asdf"; then
+  echo "Please install asdf." 1>&2
+  exit 1
+fi
+
+install_plugins

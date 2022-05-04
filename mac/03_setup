@@ -6,11 +6,12 @@ function has() {
 }
 
 # prezto
+echo ""
 echo "===== Install prezto ====="
+echo ""
 sleep 0.5
-if [ -d "${ZDOTDIR:-$HOME}/.zprezto" ]; then
+if [[ -d "${ZDOTDIR:-$HOME}/.zprezto" ]]; then
   echo "already installed"
-  echo ""
 else
   # prezto
   git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
@@ -21,11 +22,12 @@ else
 fi
 
 # powerline fonts
+echo ""
 echo "===== Install powerline fonts ====="
+echo ""
 sleep 0.5
 if find ~/Library/Fonts -name "Ubuntu*" >/dev/null 2>&1; then
   echo "already installed"
-  echo ""
 else
   ~/dotfiles/fonts/install.sh
   echo ""
@@ -34,7 +36,9 @@ else
 fi
 
 # setup fzf
+echo ""
 echo "===== Install fzf settings ====="
+echo ""
 if has "brew" && has "fzf" ; then
   "$(brew --prefix)"/opt/fzf/install \
     --key-bindings --no-completion --no-update-rc
