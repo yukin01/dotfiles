@@ -22,12 +22,21 @@ $ bash -c "$(curl -fsSL dot.yukin01.dev)"
 ```
 
 
-### Git & SSH
+### SSH
 
-Configure SSH settings.
+Generate SSH key pair.
 
 ```bash
 $ ./ssh.sh
+```
+
+
+### Git
+
+Configure git remote repo.
+
+```bash
+$ ./mac/00_git
 ```
 
 
@@ -46,9 +55,6 @@ For `kubectl`, don't enable *Docker for Mac*'s k8s option before installing *Min
 
 ```bash
 $ ./mac/02_asdf
-```
-
-```bash
 $ ./mac/03_setup
 ```
 
@@ -140,7 +146,6 @@ $ ansible-playbook -i hosts ubuntu.yml --ask-become-pass
 
 - [Generating a new SSH key and adding it to the ssh-agent](https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
 - [お前らのSSH Keysの作り方は間違っている](https://qiita.com/suthio/items/2760e4cff0e185fe2db9)
-- [MacにHomeBrew,rbenv,bundlerをインストールする](https://qiita.com/shinkuFencer/items/3679cfd966f6a61ccd1b)
 - [ログインシェルとインタラクティブシェルと~/.bashrc達の関係](https://qiita.com/incep/items/7e5760de0c2c748296aa)
 - [zshの設定ファイルの読み込み順序と使い方Tipsまとめ](https://qiita.com/muran001/items/7b104d33f5ea3f75353f)
 - [DockerのVolumeマウントのオーナーとfixuidとeuid](https://bufferings.hatenablog.com/entry/2018/08/26/015035)

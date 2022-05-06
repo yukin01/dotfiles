@@ -15,7 +15,6 @@ sleep 0.5
 if has "brew"; then
     echo "Already installed."
 elif has "git" && has "curl"; then
-    # xcode-select --install
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 else
   echo "Please install git and curl." 1>&2

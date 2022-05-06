@@ -1,0 +1,44 @@
+#!/bin/bash
+set -eu
+
+function has() {
+  type "$1" &>/dev/null
+}
+
+echo ""
+echo "===== Set git remote repository ====="
+echo ""
+
+has "git" || (echo "Please install git" && exit 1)
+
+git_name=$(git config --global --get user.name || echo "")
+git_email=$(git config --global --get user.email || echo "")
+
+if [[ -z "${git_name}" ]]; then
+  default_git_name="yukin01"
+  read -r -p "Enter your name (${default_git_name}): " git_name
+  git config --global user.name "${git_name:=$default_git_name}"
+fi
+echo "Your git user name is ${git_name}"
+echo ""
+
+if [[ -z "${git_email}" ]]; then
+  default_git_email="38382781+yukin01@users.noreply.github.com"
+  read -r -p "Enter your email address (${default_git_email}): " git_email
+  git config --global user.email "${git_email:=$default_git_email}"
+fi
+echo "Your git user email is ${git_email}"
+echo ""
+
+if [[ -d ~/dotfiles ]]; then
+  cd ~/dotfiles
+  set -x
+  git remote set-url origin git@github.com:yukin01/dotfiles.git
+  git remote -v
+  git fetch
+  { set +x; } 2>/dev/null
+fi
+
+echo ""
+echo "Git with ssh is configured successfully."
+echo ""
