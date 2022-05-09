@@ -13,6 +13,11 @@ if has "starship"; then
   eval "$(starship init zsh)"
 fi
 
+# for completion (before compinit in asdf)
+if [[ -d "$HOME/dotfiles" ]]; then
+  fpath=($HOME/dotfiles/completions/zsh $fpath)
+fi
+
 # For asdf
 if [[ -d "$HOME/.asdf" ]]; then
   source "$HOME/.asdf/asdf.sh"
@@ -41,21 +46,6 @@ if has "brew" && has "gcloud" 2>&1; then
   # source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
   source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
 fi
-
-# for kubectl completion
-# NOTE: this has been moved to `.rc/functions`.
-
-# for awscli completion
-# NOTE: https://github.com/Homebrew/homebrew-core/blob/6798763743df1ad3fe256aa27b39807ab690437a/Formula/awscli.rb#L117-L125
-
-# for aws-vault completion
-if has "aws-vault"; then
-  eval "$(aws-vault --completion-script-zsh)"
-fi
-
-# for additional zsh completions
-# fpath=($HOME/dotfiles/completions/zsh $fpath)
-# autoload -Uz compinit && compinit
 
 # Set common rc
 if [[ -d ~/.rc ]]; then

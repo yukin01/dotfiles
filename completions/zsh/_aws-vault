@@ -1,23 +1,21 @@
 #compdef aws-vault
 
+# https://github.com/99designs/aws-vault/blob/3a2136a447bfc65c70a802fddede9d11b6e0ab10/contrib/completions/zsh/aws-vault.zsh
 _aws-vault() {
-  _arguments \
-    '1: :->first' \
-    '*:: :->args'
+    local i
+    for (( i=2; i < CURRENT; i++ )); do
+        if [[ ${words[i]} == -- ]]; then
+            shift $i words
+            (( CURRENT -= i ))
+            _normal
+            return
+        fi
+    done
 
-  case $state in
-    first)
-      compadd 'exec' 'login'
-      ;;
-    args)
-      case $words[1] in
-        exec)
-          compadd -S ' -- ' $(aws-vault list --profiles)
-          ;;
-        login)
-          compadd $(aws-vault list --profiles)
-          ;;
-      esac
-      ;;
-  esac
+    local matches=($(${words[1]} --completion-bash ${(@)words[2,$CURRENT]}))
+    compadd -a matches
+
+    if [[ $compstate[nmatches] -eq 0 && $words[$CURRENT] != -* ]]; then
+        _files
+    fi
 }
