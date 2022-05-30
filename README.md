@@ -88,8 +88,8 @@ $ chsh -s /usr/local/bin/zsh
 
 ### iTerm2
 
-- [color](https://github.com/wesbos/Cobalt2-iterm)
-- [font](https://github.com/powerline/fonts)
+- color theme: [Dracula](https://github.com/dracula/iterm)
+- font: [HackGen35Nerd Console](https://github.com/yuru7/HackGen)
 
 
 ### Manual
