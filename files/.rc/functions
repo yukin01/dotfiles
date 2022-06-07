@@ -1,60 +1,70 @@
 # vim:filetype=sh
 function curlp() {
-  while :; do curl -LI $1 -o /dev/null -w '%{http_code}\n' -s; sleep 3; done
+  while :; do curl -LI "$1" -o /dev/null -w '%{http_code}\n' -s; sleep 3; done
 }
 
 # ghq & code
 function ghc() {
-  local repo=$(ghq list | fzf)
-  #ghq list | fzf | read -l repo
-  [[ -n $repo ]] && code $(ghq root)/$repo
+  local repo
+  repo=$(ghq list | fzf)
+  [[ -n "$repo" ]] && code "$(ghq root)/$repo"
 }
 
 # ghq & cd
 function ghcd() {
-  local repo=$(ghq list | fzf)
-  [[ -n $repo ]] && cd $(ghq root)/$repo
+  local repo
+  repo=$(ghq list | fzf)
+  [[ -n "$repo" ]] && cd "$(ghq root)/$repo" || return
 }
 
 # ghq & hub api & hub browse
 function ghb() {
-  [[ $# -eq 0 ]] && (echo No arguments. && exit 1)
-  local repo=$(__get_github_repo $@)
-  [[ -n $repo ]] && hub browse $repo
+  [[ "$#" -eq 0 ]] && __log_fatal "No arguments."
+  local repo
+  repo=$(__get_github_repo "$@")
+  [[ -n "$repo" ]] && hub browse "$repo"
 }
 
 # hub api & ghq get
 function ghg() {
-  [[ $# -eq 0 ]] && (echo No arguments. && exit 1)
-  local repo=$(__get_github_repo $@)
-  [[ -n $repo ]] && ghq get -p $repo
+  [[ "$#" -eq 0 ]] && __log_fatal "No arguments."
+  local repo
+  repo=$(__get_github_repo "$@")
+  [[ -n "$repo" ]] && ghq get -p "$repo"
+}
+
+function __log_fatal() {
+  echo "$1" 1>&2
+  return 1
 }
 
 function __get_github_repo() {
   local repo
   while getopts "ls:u:o:" OPT
   do
-    case $OPT in
+    case "${OPT}" in
       l)
         repo=$(ghq list | fzf | cut -d '/' -f 2,3);;
       s)
         repo=$(
-          hub api -X GET search/repositories -F q=$OPTARG | \
-          jq -r '.items[].full_name' | fzf
+          gh search repos "${OPTARG}" --json fullName \
+          --jq '.[].fullName' | fzf
         );;
       u)
         repo=$(
-          hub api users/$OPTARG/repos --paginate | \
-          jq -r '.[].full_name' | fzf
+          gh api users/"${OPTARG}"/repos --paginate \
+            --jq '.[].full_name' | fzf
         );;
       o)
         repo=$(
-          hub api --cache 3600 orgs/$OPTARG/repos --paginate | \
-          jq -r '.[].full_name' | fzf
+          gh api --cache 1h orgs/"${OPTARG}"/repos --paginate \
+            --jq '.[].full_name' | fzf
         );;
+      *)
+        ;;
     esac
   done
-  echo $repo
+  echo "$repo"
 }
 
 # Change default branch from master to main
@@ -65,7 +75,7 @@ function github-main() {
 }
 
 function brew-formulae-usage() {
-  brew list --formulae | xargs -P`expr $(sysctl -n hw.ncpu) - 1` -I{} \
+  brew list --formulae | xargs -P$(expr $(sysctl -n hw.ncpu) - 1) -I{} \
     sh -c 'brew uses --installed {} | wc -l | xargs printf "%20s is used by %2d formulae.\n" {}'
 }
 
