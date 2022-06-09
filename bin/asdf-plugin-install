@@ -17,9 +17,9 @@ function install_plugins() {
       set -x
       asdf plugin add "$plugin"
       { set +x; } 2>/dev/null
-      if [[ $plugin == "nodejs" ]]; then
-        bash -c '${ASDF_DATA_DIR:=$HOME/.asdf}/plugins/nodejs/bin/import-release-team-keyring'
-      fi
+      # if [[ $plugin == "nodejs" ]]; then
+      #   bash -c '${ASDF_DATA_DIR:=$HOME/.asdf}/plugins/nodejs/bin/import-release-team-keyring'
+      # fi
     fi
   done
 }
