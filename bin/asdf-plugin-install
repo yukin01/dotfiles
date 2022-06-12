@@ -10,10 +10,13 @@ function contains() {
 }
 
 function install_plugins() {
-  local installed_plugins=$(asdf plugin list)
+  local installed_plugins
 
-  for plugin in $(awk '{print $1}' ~/.tool-versions); do
-    if ! contains "$installed_plugins" "$plugin"; then
+  installed_plugins=$(asdf plugin list)
+  awk '{print $1}' ~/.tool-versions | while read -r plugin; do
+    if contains "$installed_plugins" "$plugin"; then
+      echo "$plugin is already added."
+    else
       set -x
       asdf plugin add "$plugin"
       { set +x; } 2>/dev/null
