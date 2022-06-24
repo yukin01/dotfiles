@@ -1,3 +1,5 @@
+# Fig pre block. Keep at the top of this file.
+[[ -f "$HOME/.fig/shell/bashrc.pre.bash" ]] && . "$HOME/.fig/shell/bashrc.pre.bash"
 # for asdf
 if [ -d ~/.asdf ]; then
   source ~/.asdf/asdf.sh
@@ -22,12 +24,15 @@ fi
 # set vi keybind
 set -o vi
 
-# fzf bash completion and key-bindings
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
 # colorize
 if [ $UID -eq 0 ]; then
     PS1="\[\033[31m\]\u@\h\[\033[00m\]:\[\033[01m\]\w\[\033[00m\]\\$ "
 else
     PS1="\[\033[36m\]\u@\h\[\033[00m\]:\[\033[01m\]\w\[\033[00m\]\\$ "
 fi
+
+# fzf bash completion and key-bindings
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# Fig post block. Keep at the bottom of this file.
+[[ -f "$HOME/.fig/shell/bashrc.post.bash" ]] && . "$HOME/.fig/shell/bashrc.post.bash"
