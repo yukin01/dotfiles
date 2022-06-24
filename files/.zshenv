@@ -1,4 +1,4 @@
 # Profiling
-if [[ -n "${ENABLE_PROFILING}" ]]; then
+if [[ -n "${ENABLE_ZSH_PROFILING}" ]]; then
   zmodload zsh/zprof && zprof
 fi
