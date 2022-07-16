@@ -16,16 +16,17 @@ if has "starship"; then
   eval "$(starship init zsh)"
 fi
 
-# for completion (before compinit in asdf)
+# For my completion (before compinit in asdf)
 if [[ -d "$HOME/dotfiles" ]]; then
   fpath=($HOME/dotfiles/completions/zsh $fpath)
+  autoload -Uz compinit && compinit
 fi
 
 # For asdf
 if [[ -d "$HOME/.asdf" ]]; then
   source "$HOME/.asdf/asdf.sh"
-  fpath=(${ASDF_DIR}/completions $fpath)
-  autoload -Uz compinit && compinit
+  # fpath=(${ASDF_DIR}/completions $fpath)
+  # autoload -Uz compinit && compinit
 fi
 
 # For direnv
@@ -46,8 +47,8 @@ load-tfswitch
 
 # For gcloud completion on macos
 if has "brew" && has "gcloud" 2>&1; then
-  # source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
-  source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
+  # source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
+  # source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
 fi
 
 # Set common rc
@@ -57,13 +58,13 @@ if [[ -d ~/.rc ]]; then
   source ~/.rc/functions
 fi
 
-# scripts for business
+# Scripts for business
 [[ -f ~/scripts-for-business/files/.envrc ]] && source ~/scripts-for-business/files/.envrc
 
 # Set vi keybind
 bindkey -v
 
-# for fzf key-bindings
+# For fzf key-bindings
 # this should be sourced after `bindkey -v`
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
 
