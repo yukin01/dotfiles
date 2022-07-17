@@ -28,3 +28,8 @@ else
   $HOME/dotfiles/bin/asdf-plugin-install
 fi
 asdf install
+
+echo ""
+echo "===== Setup asdf direnv ====="
+echo ""
+asdf direnv setup --shell zsh --version latest

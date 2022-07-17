@@ -30,13 +30,14 @@ if [[ -d "$HOME/.asdf" ]]; then
 fi
 
 # For direnv
-if has "direnv"; then
-  eval "$(direnv hook zsh)"
-fi
+# if has "direnv"; then
+#   eval "$(direnv hook zsh)"
+# fi
 
 # For asdf-direnv
-# DON'T REMOVE THIS LINE
-# source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
+if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc" ]]; then
+  source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
+fi
 
 # For tfswitch hook
 load-tfswitch() {
