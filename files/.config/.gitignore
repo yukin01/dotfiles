@@ -1,0 +1,13 @@
+*
+!*/
+
+# allow list
+!.gitignore
+!gh/**
+!yarn/**
+!starship.toml
+
+# ignore list
+gh/hosts.yml
+yarn/global/node_modules
+yarn/global/yarn.lock
