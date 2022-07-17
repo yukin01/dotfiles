@@ -34,6 +34,10 @@ if has "direnv"; then
   eval "$(direnv hook zsh)"
 fi
 
+# For asdf-direnv
+# DON'T REMOVE THIS LINE
+# source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
+
 # For tfswitch hook
 load-tfswitch() {
   local tfswitchrc_path="providers.tf"
@@ -46,7 +50,7 @@ add-zsh-hook chpwd load-tfswitch
 load-tfswitch
 
 # For gcloud completion on macos
-if has "brew" && has "gcloud" 2>&1; then
+if [[ -d "/usr/local/Caskroom/google-cloud-sdk" ]]; then
   # source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
   # source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
 fi
