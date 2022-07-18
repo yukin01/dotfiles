@@ -1,15 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -eu
 
-function has() {
-  type "$1" &>/dev/null
-}
-
-BREW_PATH="$HOME/dotfiles/Brewfile"
+# shellcheck source=./lib/utils.sh
+source "$(dirname "$0")/../lib/utils.sh"
 
 echo ""
 echo "===== Install homebrew ====="
 echo ""
+
+BREW_PATH="$HOME/dotfiles/Brewfile"
 
 sleep 0.5
 if has "brew"; then
@@ -17,8 +16,7 @@ if has "brew"; then
 elif has "git" && has "curl"; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 else
-  echo "Please install git and curl." 1>&2
-  exit 1
+  echo_exit "Please install git and curl."
 fi
 brew doctor
 

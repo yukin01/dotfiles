@@ -1,19 +1,19 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -eu
 
 function has() {
-  if [ $# -eq 2 ]; then
-    type $1 | grep $2 > /dev/null 2>&1
+  if [ "$#" -eq 2 ]; then
+    type "$1" | grep "$2" >/dev/null 2>&1
   else
-    type $1 > /dev/null 2>&1
+    type "$1" >/dev/null 2>&1
   fi
 }
 
 # anyenv
 echo "===== Initialize anyenv ====="
 sleep 0.5
-has anyenv || (echo Please install anyenv. && exit 1)
-if [ -d ~/.config/anyenv/anyenv-install ]; then
+has "anyenv" || (echo "Please install anyenv." 1>&2 && exit 1)
+if [[ -d "$HOME/.config/anyenv/anyenv-install" ]]; then
   echo "anyenv is already initialized"
 else
   anyenv install --init
@@ -25,7 +25,7 @@ echo ""
 # rbenv
 echo "===== Install rbenv via anyenv ====="
 sleep 0.5
-if has rbenv; then
+if has "rbenv"; then
   echo "rbenv is already installed"
 else
   anyenv install rbenv
@@ -38,14 +38,14 @@ echo ""
 # nodenv
 echo "===== Install nodenv via anyenv ====="
 sleep 0.5
-if has nodenv; then
+if has "nodenv"; then
   echo "already installed"
 else
   anyenv install nodenv
   eval "$(anyenv init -)"
 
   # https://qiita.com/tea-red/items/361c72df55b3fcd0e0bf
-  touch $(nodenv root)/default-packages
+  touch "$(nodenv root)/default-packages"
 fi
 echo ""
 echo "path: $(which nodenv)"
@@ -54,7 +54,7 @@ echo ""
 # ruby
 echo "===== Install ruby via rbenv ====="
 sleep 0.5
-if has ruby .rbenv; then
+if has "ruby" ".rbenv"; then
   echo "already installed"
 else
   eval "$(rbenv init -)"
@@ -70,7 +70,7 @@ echo ""
 # bundler
 echo "===== Install bundler via gem ====="
 sleep 0.5
-if has bundle; then
+if has "bundle"; then
   echo "already installed"
 else
   gem install bundler
@@ -83,7 +83,7 @@ echo ""
 # node
 echo "===== Install node via nodenv ====="
 sleep 0.5
-if has node .nodenv; then
+if has "node" ".nodenv"; then
   echo "already installed"
 else
   eval "$(nodenv init -)"

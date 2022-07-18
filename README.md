@@ -27,7 +27,7 @@ $ bash -c "$(curl -fsSL dot.yukin01.dev)"
 Generate SSH key pair.
 
 ```bash
-$ ./ssh.sh
+$ ./scripts/01-setup-ssh.sh
 ```
 
 
@@ -36,7 +36,7 @@ $ ./ssh.sh
 Configure git remote repo.
 
 ```bash
-$ ./mac/00_git
+$ ./scripts/02-setup-git.sh
 ```
 
 
@@ -45,7 +45,7 @@ $ ./mac/00_git
 Install *Homebrew* and packages.
 
 ```bash
-$ ./mac/01_homebrew
+$ ./scripts/03-setup-homebrew.sh
 ```
 
 For `kubectl`, don't enable *Docker for Mac*'s k8s option before installing *Minikube*.
@@ -54,17 +54,9 @@ For `kubectl`, don't enable *Docker for Mac*'s k8s option before installing *Min
 ### Tools
 
 ```bash
-$ ./mac/02_asdf
-$ ./mac/03_setup
+$ ./mac/04-setup-asdf.sh
+$ ./mac/05-setup-tools.sh
 ```
-
-|                       name                        |                usage                |
-|:-------------------------------------------------:|:-----------------------------------:|
-|      [asdf](https://github.com/asdf-vm/asdf)      |  Manage multiple runtime versions   |
-| [prezto](https://github.com/sorin-ionescu/prezto) | The configuration framework for Zsh |
-
-Note: https://github.com/asdf-vm/asdf-nodejs
-
 
 ### Zsh
 
@@ -101,10 +93,12 @@ $ chsh -s /usr/local/bin/zsh
   - Swap CapsLock and Ctrl
 - VSCode Settings Sync
 - Google Chrome login
-- `gh api user`
 
 
 ## Ubuntu
+
+<details>
+<summary>Deprecated</summary>
 
 Clone this repo.
 
@@ -136,6 +130,8 @@ Run ansible playbook.
 $ ansible-playbook -i hosts ubuntu.yml --ask-become-pass
 ```
 
+</details>
+
 
 ## Suggestion
 
@@ -152,3 +148,4 @@ $ ansible-playbook -i hosts ubuntu.yml --ask-become-pass
 - [優れた dotfiles を設計して、最速で環境構築する話](https://qiita.com/b4b4r07/items/24872cdcbec964ce2178)
 - [なぜ今シェルスクリプトを学ぶのか・シェルスクリプトのTips](https://kiririmode.hatenablog.jp/entry/20220430/1651309058)
 - [dotfilesリポジトリで管理したgitconfigはHOMEではなくXDG_CONFIG_HOME配下に置くとよい](https://horimisli.me/entry/git-config-location/)
+- [dotfilesのこだわりを晒す](https://www.m3tech.blog/entry/dotfiles-bonsai)
