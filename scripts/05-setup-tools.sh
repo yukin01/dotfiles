@@ -49,4 +49,18 @@ if has "gh"; then
   echo ""
 fi
 
+echo ""
+echo "===== Install yarn global packages ====="
+echo ""
+
+if has "yarn"; then
+  set -x
+  yarn global add
+  { set +x; } 2>/dev/null
+
+  echo ""
+  echo "GitHub CLI is configured successfully."
+  echo ""
+fi
+
 echo "Set up your macOS successfully."
