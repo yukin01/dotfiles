@@ -60,7 +60,8 @@ echo "===== Generate SSH key ====="
 echo ""
 
 if [[ -f "$HOME/.ssh/id_ed25519" ]] && [[ -f "$HOME/.ssh/id_ed25519.pub" ]]; then
-  echo "SSH key pair already exists."
+  echo "SSH key pair already exists. Skip generating key pair and copy public key."
+  [[ "$(uname)" == "Darwin" ]] && pbcopy < "$HOME/.ssh/id_ed25519.pub"
 else
   read -r -p "Enter your email address: " email
   echo ""
@@ -75,7 +76,7 @@ else
   cat "$HOME/.ssh/id_ed25519.pub"
   [[ "$(uname)" == "Darwin" ]] && pbcopy < "$HOME/.ssh/id_ed25519.pub"
   echo ""
-  read -r -p "After registering public key, press the enter key: "
+  read -r -p "After registering authentication key and signing key, press the enter key: "
 fi
 
 echo ""
