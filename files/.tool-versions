@@ -1,10 +1,10 @@
-kubectl 1.24.17
+kubectl 1.27.12
 kubectx 0.9.5
-kustomize 4.5.7
+kustomize 5.0.1
 helm 3.10.1
 argocd 2.5.0
 argo-rollouts 1.0.2
 ruby 2.7.1
-nodejs 16.20.0
+nodejs 20.9.0
 python 3.10.4
 direnv 2.32.1
