@@ -88,6 +88,8 @@ $ chsh -s /opt/homebrew/bin/zsh # for Apple Silicon
 
 ### Manual
 
+- Disable *Spotlight* shortcut
+  - https://manual.raycast.com/hotkey
 - System Settings > Keyboard > Text Input > Edit...
   - Add Google Japanese IME
   - Disable below
