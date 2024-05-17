@@ -1,5 +1,11 @@
 # Fig pre block. Keep at the top of this file.
 [[ -f "$HOME/.fig/shell/bashrc.pre.bash" ]] && builtin source "$HOME/.fig/shell/bashrc.pre.bash"
+
+# for homebrew
+if  [ "$(uname -m)" = "arm64" ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 # for asdf
 if [ -d ~/.asdf ]; then
   source ~/.asdf/asdf.sh

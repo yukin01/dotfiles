@@ -54,8 +54,8 @@ For `kubectl`, don't enable *Docker for Mac*'s k8s option before installing *Min
 ### Tools
 
 ```bash
-$ ./mac/04-setup-asdf.sh
-$ ./mac/05-setup-tools.sh
+$ ./scripts/04-setup-asdf.sh
+$ ./scripts/05-setup-tools.sh
 ```
 
 ### Zsh
@@ -73,26 +73,34 @@ $ sudo vi /etc/shells
 /bin/tcsh
 /bin/zsh
 /usr/local/bin/zsh # Add this
+/opt/homebrew/bin/zsh # for Apple Silicon
 
 $ chsh -s /usr/local/bin/zsh
+$ chsh -s /opt/homebrew/bin/zsh # for Apple Silicon
 ```
 
 
 ### iTerm2
 
 - color theme: [Dracula](https://github.com/dracula/iterm)
-- font: [HackGen35Nerd Console](https://github.com/yuru7/HackGen)
+- font: [HackGen35 Console NF](https://github.com/yuru7/HackGen)
 
 
 ### Manual
 
-- Login shell
-- Keyboard Settings
-  - Google Japanese IME
-  - Disable smart quotes and auto correction
+- System Settings > Keyboard > Text Input > Edit...
+  - Add Google Japanese IME
+  - Disable below
+    - *Use smart quotes and dashes*
+    - *Correct spelling automatically*
+    - *Capitalize words automatically*
+    - *Show inline predictive text*
+    - *Add period with double-space*
   - Swap CapsLock and Ctrl
-- VSCode Settings Sync
-- Google Chrome login
+- Login below
+  - Visual Studio Code
+  - Google Chrome
+  - Dash, Fig
 
 
 ## Ubuntu
@@ -133,11 +141,6 @@ $ ansible-playbook -i hosts ubuntu.yml --ask-become-pass
 </details>
 
 
-## Suggestion
-
-- fish
-
-
 ## References
 
 - [Generating a new SSH key and adding it to the ssh-agent](https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
@@ -149,3 +152,4 @@ $ ansible-playbook -i hosts ubuntu.yml --ask-become-pass
 - [なぜ今シェルスクリプトを学ぶのか・シェルスクリプトのTips](https://kiririmode.hatenablog.jp/entry/20220430/1651309058)
 - [dotfilesリポジトリで管理したgitconfigはHOMEではなくXDG_CONFIG_HOME配下に置くとよい](https://horimisli.me/entry/git-config-location/)
 - [dotfilesのこだわりを晒す](https://www.m3tech.blog/entry/dotfiles-bonsai)
+- [M1のMacにHomebrewをインストールしてPATHを通す](https://motomichi-works.hatenablog.com/entry/2022/02/06/000215)

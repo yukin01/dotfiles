@@ -9,11 +9,12 @@ echo "===== Install asdf ====="
 echo ""
 
 sleep 0.5
+ASDF_VERSION="v0.14.0"
 if [[ -d "$HOME/.asdf" ]]; then
   echo "Already installed."
 else
   set -x
-  git clone https://github.com/asdf-vm/asdf.git "$HOME/.asdf" --branch v0.10.0
+  git clone https://github.com/asdf-vm/asdf.git "$HOME/.asdf" --branch "$ASDF_VERSION"
   { set +x; } 2>/dev/null
 fi
 

@@ -6,7 +6,9 @@ source "$(dirname "$0")/../lib/utils.sh"
 function install_plugins() {
   local installed_plugins
 
+  set +e
   installed_plugins=$(asdf plugin list)
+  set -e
   awk '{print $1}' ~/.tool-versions | while read -r plugin; do
     if contains "$installed_plugins" "$plugin"; then
       echo "$plugin is already added."
