@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -eu
 
 # shellcheck source=./lib/utils.sh
@@ -80,5 +80,5 @@ else
 fi
 
 echo ""
-echo "SSH is configured successfully."
+echo "🎉 SSH is configured successfully."
 echo ""

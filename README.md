@@ -58,28 +58,6 @@ $ ./scripts/04-setup-asdf.sh
 $ ./scripts/05-setup-tools.sh
 ```
 
-### Zsh
-
-```bash
-$ sudo vi /etc/shells
-# List of acceptable shells for chpass(1).
-# Ftpd will not allow users to connect who are not using
-# one of these shells.
-
-/bin/bash
-/bin/csh
-/bin/ksh
-/bin/sh
-/bin/tcsh
-/bin/zsh
-/usr/local/bin/zsh # Add this
-/opt/homebrew/bin/zsh # for Apple Silicon
-
-$ chsh -s /usr/local/bin/zsh
-$ chsh -s /opt/homebrew/bin/zsh # for Apple Silicon
-```
-
-
 ### iTerm2
 
 - color theme: [Dracula](https://github.com/dracula/iterm)

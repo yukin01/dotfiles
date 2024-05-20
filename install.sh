@@ -17,8 +17,8 @@ else
   { set +x; } 2>/dev/null
 fi
 
-bash "${INSTALL_DIR}/scripts/00-setup-link.sh"
+echo
+echo "✅ Dotfiles are installed successfully."
+echo
 
-echo
-echo "Dotfiles are installed successfully."
-echo
+bash "${INSTALL_DIR}/scripts/00-setup-link.sh"

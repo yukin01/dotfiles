@@ -15,7 +15,10 @@ if has "brew"; then
     echo "Already installed."
 elif has "git" && has "curl"; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-    eval "$(/opt/homebrew/bin/brew shellenv)"
+
+    if  [[ "$(uname -m)" == "arm64" ]]; then
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+    fi
 else
   echo_exit "Please install git and curl."
 fi
@@ -29,5 +32,5 @@ sleep 0.5
 brew bundle --file="${BREW_PATH}"
 
 echo ""
-echo "Homebrew and packages are installed successfully."
+echo "🎉 Homebrew and packages are installed successfully."
 echo ""

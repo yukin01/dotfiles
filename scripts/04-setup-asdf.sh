@@ -39,3 +39,7 @@ sleep 0.5
 set -x
 asdf direnv setup --shell zsh --version latest
 { set +x; } 2>/dev/null
+
+echo ""
+echo "🎉 asdf is configured successfully."
+echo ""

@@ -43,5 +43,5 @@ if [[ -d "$HOME/dotfiles" ]]; then
 fi
 
 echo ""
-echo "Git is configured successfully."
+echo "🎉 Git is configured successfully."
 echo ""

@@ -10,14 +10,16 @@ echo ""
 
 sleep 0.5
 if [[ -d "${ZDOTDIR:-$HOME}/.zprezto" ]]; then
-  echo "already installed"
+  echo
+  echo "✅ Prezto is already installed."
+  echo
 else
   set -x
   git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
   { set +x; } 2>/dev/null
 
   echo ""
-  echo "Prezto is installed successfully."
+  echo "✅ Prezto is installed successfully."
   echo ""
 fi
 
@@ -31,7 +33,7 @@ if has "brew" && has "fzf" ; then
   { set +x; } 2>/dev/null
 
   echo ""
-  echo "FZF is configured successfully."
+  echo "✅ FZF is configured successfully."
   echo ""
 fi
 
@@ -41,11 +43,11 @@ echo ""
 
 if has "gh"; then
   set -x
-  gh auth login --hostname github.com --git-protocol ssh --web
+  gh auth login --hostname github.com --git-protocol ssh --web --skip-ssh-key
   { set +x; } 2>/dev/null
 
   echo ""
-  echo "GitHub CLI is configured successfully."
+  echo "✅ GitHub CLI is configured successfully."
   echo ""
 fi
 
@@ -59,8 +61,42 @@ if has "yarn"; then
   { set +x; } 2>/dev/null
 
   echo ""
-  echo "GitHub CLI is configured successfully."
+  echo "✅ Yarn global packages are installed successfully."
   echo ""
 fi
 
-echo "Set up your macOS successfully."
+echo ""
+echo "===== Change default shell ====="
+echo ""
+
+if cat /etc/shells | grep "$(brew --prefix)/bin/zsh" &>/dev/null; then
+  echo ""
+  echo "✅ Zsh is already registered in /etc/shells."
+  echo ""
+else
+  set -x
+  echo "$(brew --prefix)/bin/zsh" | sudo tee -a /etc/shells
+  { set +x; } 2>/dev/null
+
+  echo ""
+  echo "✅ Zsh is registered in /etc/shells."
+  echo ""
+fi
+
+if [[ "$SHELL" == "$(brew --prefix)/bin/zsh" ]]; then
+  echo ""
+  echo "✅ Default shell is already zsh."
+  echo ""
+else
+  set -x
+  chsh -s "$(brew --prefix)/bin/zsh"
+  { set +x; } 2>/dev/null
+
+  echo ""
+  echo "✅ Default shell is changed to zsh."
+  echo ""
+fi
+
+echo ""
+echo "🎉 MacOS setup has been successfully completed."
+echo ""
