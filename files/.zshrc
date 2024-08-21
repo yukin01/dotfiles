@@ -42,16 +42,16 @@ if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc" ]]; then
   source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
 fi
 
-# For tfswitch hook
-load-tfswitch() {
-  local tfswitchrc_path="providers.tf"
+# For tenv hook
+load-tenv() {
+  local tenv_auto_detect_path="providers.tf"
 
-  if [[ -f "${tfswitchrc_path}" ]]; then
-    tfswitch
+  if [[ -f "${tenv_auto_detect_path}" ]]; then
+    tenv tf detect
   fi
 }
-add-zsh-hook chpwd load-tfswitch
-load-tfswitch
+add-zsh-hook chpwd load-tenv
+load-tenv
 
 # For gcloud completion on macos
 if [[ -d "/usr/local/Caskroom/google-cloud-sdk" ]]; then

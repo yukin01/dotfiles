@@ -47,3 +47,4 @@ disabled = false
 
 [terraform]
 format = "via [$symbol$version]($style) "
+disabled = false

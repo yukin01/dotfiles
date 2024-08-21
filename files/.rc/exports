@@ -18,3 +18,6 @@ export PATH=$HOME/.yarn/bin:$PATH
 
 # custom commands
 export PATH=$HOME/dotfiles/bin:$PATH
+
+# tenv
+export TENV_AUTO_INSTALL=true
