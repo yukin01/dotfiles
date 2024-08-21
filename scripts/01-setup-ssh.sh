@@ -37,6 +37,7 @@ Host *
   GSSAPIAuthentication no
   UseRoaming no
   AddKeysToAgent yes
+  IdentityFile ~/.ssh/id_ed25519
 EOS
 )
 
