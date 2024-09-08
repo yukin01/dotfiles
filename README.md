@@ -80,7 +80,7 @@ $ ./scripts/05-setup-tools.sh
 - Login below
   - Visual Studio Code
   - Google Chrome
-  - Dash, Fig
+  - Dash, Warp
 
 
 ## Ubuntu

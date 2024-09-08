@@ -1,5 +1,3 @@
-# Fig pre block. Keep at the top of this file.
-[[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.pre.zsh"
 function has() {
   type "$1" &>/dev/null
 }
@@ -28,8 +26,8 @@ fi
 # For asdf
 if [[ -d "$HOME/.asdf" ]]; then
   source "$HOME/.asdf/asdf.sh"
-  # fpath=(${ASDF_DIR}/completions $fpath)
-  # autoload -Uz compinit && compinit
+  fpath=(${ASDF_DIR}/completions $fpath)
+  autoload -Uz compinit && compinit
 fi
 
 # For direnv
@@ -75,6 +73,3 @@ bindkey -v
 # For fzf key-bindings
 # this should be sourced after `bindkey -v`
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
-
-# Fig post block. Keep at the bottom of this file.
-[[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"

@@ -11,13 +11,16 @@ export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 
 # krew path
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+export PATH="$PATH:${KREW_ROOT:-$HOME/.krew}/bin"
 
 # yarn global path
-export PATH=$HOME/.yarn/bin:$PATH
+export PATH=$PATH:$HOME/.yarn/bin
 
 # custom commands
-export PATH=$HOME/dotfiles/bin:$PATH
+export PATH=$PATH:$HOME/dotfiles/bin
 
 # tenv
 export TENV_AUTO_INSTALL=true
+
+# Rancher Desktop
+export PATH=$PATH:$HOME/.rd/bin

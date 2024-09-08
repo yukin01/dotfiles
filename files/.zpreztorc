@@ -31,7 +31,7 @@ zstyle ':prezto:load' pmodule \
   'syntax-highlighting' \
   'history' \
   'autosuggestions' \
-#  'completion' \
+  'completion' \
 #  'utility' \
 #  'environment' \
 #  'terminal' \
