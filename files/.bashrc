@@ -1,17 +1,20 @@
+function has() {
+  type "$1" &>/dev/null
+}
+
 # for homebrew
 if  [ "$(uname -m)" = "arm64" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# for asdf
-if [ -d ~/.asdf ]; then
-  source ~/.asdf/asdf.sh
-  source ~/.asdf/completions/asdf.bash
+# for direnv
+if has "direnv"; then
+  eval "$(direnv hook bash)"
 fi
 
-# for direnv
-if type direnv > /dev/null 2>&1; then
-  eval "$(direnv hook bash)"
+# Activate mise
+if has "mise"; then
+  eval "$(mise activate bash)"
 fi
 
 # Set common rc

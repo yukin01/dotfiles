@@ -79,10 +79,41 @@ function brew-formulae-usage() {
     sh -c 'brew uses --installed {} | wc -l | xargs printf "%20s is used by %2d formulae.\n" {}'
 }
 
+function get-current-shell() {
+  # ps -p $$ -o comm=
+  if [[ -n "$BASH_VERSION" ]]; then
+    echo "bash"
+  elif [[ -n "$ZSH_VERSION" ]]; then
+    echo "zsh"
+  else
+    echo ""
+  fi
+}
+
 function kubectl() {
   unset -f kubectl
   # lazy load
-  source <(kubectl completion "${SHELL##*/}")
-  echo "kubectl completion has been loaded."
-  [[ "$#" -eq 0 ]] || kubectl "$@"
+  local shell
+  shell=$(get-current-shell)
+
+  if [[ -n "$shell" ]]; then
+    source <(kubectl completion "$shell")
+    echo "kubectl completion has been loaded for $shell."
+  fi
+
+  [[ "$#" -eq 0 ]] || command kubectl "$@"
+}
+
+function gcloud() {
+  unset -f gcloud
+  # lazy load
+  local shell
+  shell=$(get-current-shell)
+
+  if [[ -n "$shell" ]]; then
+    source "$(brew --prefix)/share/google-cloud-sdk/completion.$shell.inc"
+    echo "gcloud completion has been loaded for $shell."
+  fi
+
+  [[ "$#" -eq 0 ]] || command gcloud "$@"
 }

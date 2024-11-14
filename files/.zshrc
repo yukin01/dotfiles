@@ -17,10 +17,15 @@ if has "starship"; then
   eval "$(starship init zsh)"
 fi
 
-# For my completion (before compinit in asdf)
+# For my completions
 if [[ -d "$HOME/dotfiles" ]]; then
   fpath=($HOME/dotfiles/completions/zsh $fpath)
   autoload -Uz compinit && compinit
+fi
+
+# For direnv
+if has "direnv"; then
+  eval "$(direnv hook zsh)"
 fi
 
 # Activate mise
@@ -43,12 +48,6 @@ load-tenv() {
 }
 add-zsh-hook chpwd load-tenv
 load-tenv
-
-# For gcloud completion on macos
-if [[ -d "/usr/local/Caskroom/google-cloud-sdk" ]]; then
-  # source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
-  # source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
-fi
 
 # Set common rc
 if [[ -d ~/.rc ]]; then
