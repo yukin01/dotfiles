@@ -23,21 +23,14 @@ if [[ -d "$HOME/dotfiles" ]]; then
   autoload -Uz compinit && compinit
 fi
 
-# For asdf
-if [[ -d "$HOME/.asdf" ]]; then
-  source "$HOME/.asdf/asdf.sh"
-  fpath=(${ASDF_DIR}/completions $fpath)
-  autoload -Uz compinit && compinit
-fi
-
-# For direnv
-# if has "direnv"; then
-#   eval "$(direnv hook zsh)"
-# fi
-
-# For asdf-direnv
-if [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc" ]]; then
-  source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
+# Activate mise
+if has "mise"; then
+  eval "$(mise activate zsh)"
+  # if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+  #   eval "$(mise activate zsh --shims)"
+  # else
+  #   eval "$(mise activate zsh)"
+  # fi
 fi
 
 # For tenv hook

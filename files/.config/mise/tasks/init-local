@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ ! -d ".git" ]]; then
+  echo "[Error] This script must be run in a git repository" 1>&2
+  exit 1
+fi
+
+set -x
+
+mkdir -p .mise-tasks
+touch mise.local.toml
+touch memo.local.md
+
+mise trust
+mise set MISE_DEFAULT_CONFIG_FILENAME=mise.local.toml --file mise.local.toml

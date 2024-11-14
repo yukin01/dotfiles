@@ -5,6 +5,21 @@ set -eu
 source "$(dirname "$0")/../lib/utils.sh"
 
 echo ""
+echo "===== Install mise tools ====="
+echo ""
+
+sleep 0.5
+if has "mise"; then
+  set -x
+  mise install
+  { set +x; } 2>/dev/null
+
+  echo ""
+  echo "✅ Mise tools are installed successfully."
+  echo ""
+fi
+
+echo ""
 echo "===== Install prezto ====="
 echo ""
 
