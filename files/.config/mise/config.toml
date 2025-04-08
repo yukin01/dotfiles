@@ -1,8 +1,12 @@
 [tools]
-node = "20"
-ruby = "3.3"
-kubectl = "1.29"
-kustomize = "5.4.2"
-helm = "3.15.2"
-argocd = "2.12.6"
-argo-rollouts = "1.7.2"
+node = "22"
+ruby = "3.4"
+kubectl = "1.31"
+kustomize = "5.6"
+helm = "3.17"
+argocd = "2.14"
+argo-rollouts = "1.8"
+"ubi:github/github-mcp-server" = "latest"
+
+[settings]
+experimental = true
