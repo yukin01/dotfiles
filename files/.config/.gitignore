@@ -8,6 +8,7 @@
 !yarn/**
 !starship.toml
 !mise/**
+!ghostty/config
 
 # ignore list
 gh/hosts.yml
