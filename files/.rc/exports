@@ -13,9 +13,6 @@ export PATH=$PATH:$GOPATH/bin
 # krew path
 export PATH="$PATH:${KREW_ROOT:-$HOME/.krew}/bin"
 
-# yarn global path
-export PATH=$PATH:$HOME/.yarn/bin
-
 # custom commands
 export PATH=$PATH:$HOME/dotfiles/bin
 

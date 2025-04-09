@@ -7,6 +7,10 @@ helm = "3.17"
 argocd = "2.14"
 argo-rollouts = "1.8"
 "ubi:github/github-mcp-server" = "latest"
+"npm:prettier" = "latest"
+"npm:cdk" = "latest"
+"npm:firebase-tools" = "latest"
+"npm:serverless" = "latest"
 
 [settings]
 experimental = true
