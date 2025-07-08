@@ -1,2 +1,5 @@
 files/.vim/plugged/*
 Brewfile.lock.json
+
+files/.claude/
+!files/.claude/settings.json

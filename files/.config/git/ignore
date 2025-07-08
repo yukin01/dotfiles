@@ -1,3 +1,5 @@
 .mise-tasks/**
 mise.local.toml
 memo.local.md
+
+**/.claude/settings.local.json
