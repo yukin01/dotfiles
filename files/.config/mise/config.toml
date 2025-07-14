@@ -13,6 +13,7 @@ argo-rollouts = "1.8"
 "npm:serverless" = "latest"
 "npm:@google/gemini-cli" = "latest"
 "npm:@anthropic-ai/claude-code" = "latest"
+"npm:ccusage" = "latest"
 
 [settings]
 experimental = true
