@@ -3,3 +3,4 @@ theme = Dracula
 window-padding-x = 10
 
 font-family = HackGen35 Console NF
+keybind = shift+enter=text:\n
