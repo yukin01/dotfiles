@@ -1,21 +1,25 @@
 [tools]
-node = "22"
+node = "24"
 deno = "2.5"
 ruby = "3.4"
-kubectl = "1.31"
+kubectl = "1.33"
 kustomize = "5.6"
 helm = "3.17"
 argocd = "2.14"
 argo-rollouts = "1.8"
-"ubi:github/github-mcp-server" = "latest"
+"npm:pnpm" = "latest"
 "npm:prettier" = "latest"
-"npm:cdk" = "latest"
+"npm:aws-cdk" = "latest"
 "npm:firebase-tools" = "latest"
 "npm:serverless" = "latest"
 "npm:@google/gemini-cli" = "latest"
 "npm:@anthropic-ai/claude-code" = "latest"
 "npm:ccusage" = "latest"
 "npm:@marp-team/marp-cli" = "latest"
+"pipx:ansible-core" = "latest"
 
 [settings]
 experimental = true
+
+[settings.pipx]
+uvx = true

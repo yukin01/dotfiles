@@ -1,7 +1,7 @@
 # vim:filetype=sh
 alias brewdump='brew bundle dump --force --formula --cask --tap --file ~/dotfiles/Brewfile'
-alias brewbundle='brew bundle --file ~/dotfiles/Brewfile'
-alias brewcleanup='brew bundle --cleanup --file ~/dotfiles/Brewfile'
+alias brewbundle='brew bundle install --file ~/dotfiles/Brewfile'
+alias brewcleanup='brew bundle cleanup --file ~/dotfiles/Brewfile'
 alias zshtime='for i in $(seq 1 10); do time zsh -i -c exit; done'
 alias zshprof='ENABLE_ZSH_PROFILING=1 zsh -i -c "zprof | less"'
 alias diskusage='du -hd1 | sort -h'

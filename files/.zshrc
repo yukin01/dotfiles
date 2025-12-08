@@ -28,16 +28,6 @@ if has "direnv"; then
   eval "$(direnv hook zsh)"
 fi
 
-# Activate mise
-if has "mise"; then
-  eval "$(mise activate zsh)"
-  # if [[ "$TERM_PROGRAM" == "vscode" ]]; then
-  #   eval "$(mise activate zsh --shims)"
-  # else
-  #   eval "$(mise activate zsh)"
-  # fi
-fi
-
 # For tenv hook
 load-tenv() {
   local tenv_auto_detect_path="providers.tf"
@@ -58,6 +48,16 @@ fi
 
 # Scripts for business
 [[ -f ~/scripts-for-business/files/.envrc ]] && source ~/scripts-for-business/files/.envrc
+
+# Activate mise
+if has "mise"; then
+  eval "$(mise activate zsh)"
+  # if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+  #   eval "$(mise activate zsh --shims)"
+  # else
+  #   eval "$(mise activate zsh)"
+  # fi
+fi
 
 # Set vi keybind
 bindkey -v
