@@ -1,0 +1,59 @@
+# vim:filetype=zsh
+#
+# zsh 固有の設定
+#
+
+typeset -gU PATH path fpath
+
+LS_COLORS=${LS_COLORS:-'di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'}
+
+#
+# 補完
+#
+
+# オプション
+setopt COMPLETE_IN_WORD    # 単語の途中でも補完
+setopt ALWAYS_TO_END       # 補完後カーソルを末尾へ
+setopt AUTO_LIST           # 曖昧なとき自動でリスト表示
+setopt AUTO_MENU           # 連続Tabでメニュー選択開始
+unsetopt MENU_COMPLETE     # 最初のTabで確定しない
+
+# fpath（brew より zsh 標準を優先）
+# /opt/homebrew/Cellar/zsh/${ZSH_VERSION}/share/zsh/functions/_git を
+# /opt/homebrew/share/zsh/site-functions/_git より先に読み込む
+fpath=(${HOMEBREW_PREFIX}/Cellar/zsh/${ZSH_VERSION}/share/zsh/functions $fpath)
+
+# 色
+zstyle ':completion:*:*:*:*:*' menu select
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*:messages' format '%F{yellow}-- %d --%f'
+zstyle ':completion:*:warnings' format '%F{red}-- no matches --%f'
+zstyle ':completion:*:descriptions' format '%F{cyan}-- %d --%f'
+zstyle ':completion:*:corrections' format '%F{green}-- %d (errors: %e) --%f'
+
+#
+# 履歴
+#
+
+# 保存先とサイズ
+HISTFILE="${ZDOTDIR:-$HOME}/.zsh_history"
+HISTSIZE=10000
+SAVEHIST=$HISTSIZE
+
+# オプション
+setopt BANG_HIST              # '!' を特別扱い
+setopt EXTENDED_HISTORY       # タイムスタンプ付きで保存
+setopt SHARE_HISTORY          # セッション間で履歴を共有
+setopt HIST_EXPIRE_DUPS_FIRST # 重複を先に削除
+setopt HIST_IGNORE_ALL_DUPS   # 古い重複を削除
+setopt HIST_FIND_NO_DUPS      # 検索時に重複を表示しない
+setopt HIST_IGNORE_SPACE      # スペースで始まるコマンドは記録しない
+setopt HIST_SAVE_NO_DUPS      # ファイルに重複を書かない
+setopt HIST_VERIFY            # 履歴展開後すぐに実行しない
+setopt HIST_BEEP              # 履歴がないときビープ
+
+#
+# エイリアス
+#
+
+alias history-stat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"

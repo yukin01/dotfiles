@@ -7,9 +7,9 @@ if  [[ "$(uname -m)" == "arm64" ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# Source Prezto
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+# Setup sheldon
+if has "sheldon"; then
+  eval "$(sheldon source)"
 fi
 
 # Setup starship
@@ -44,6 +44,7 @@ if [[ -d ~/.rc ]]; then
   source ~/.rc/exports
   source ~/.rc/aliases
   source ~/.rc/functions
+  source ~/.rc/zsh-options
 fi
 
 # Scripts for business

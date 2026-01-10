@@ -5,25 +5,6 @@ set -eu
 source "$(dirname "$0")/../lib/utils.sh"
 
 echo ""
-echo "===== Install prezto ====="
-echo ""
-
-sleep 0.5
-if [[ -d "${ZDOTDIR:-$HOME}/.zprezto" ]]; then
-  echo
-  echo "✅ Prezto is already installed."
-  echo
-else
-  set -x
-  git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
-  { set +x; } 2>/dev/null
-
-  echo ""
-  echo "✅ Prezto is installed successfully."
-  echo ""
-fi
-
-echo ""
 echo "===== Install fzf settings ====="
 echo ""
 
