@@ -28,17 +28,6 @@ if has "direnv"; then
   eval "$(direnv hook zsh)"
 fi
 
-# For tenv hook
-load-tenv() {
-  local tenv_auto_detect_path="providers.tf"
-
-  if [[ -f "${tenv_auto_detect_path}" ]]; then
-    tenv tf detect
-  fi
-}
-add-zsh-hook chpwd load-tenv
-load-tenv
-
 # Set common rc
 if [[ -d ~/.rc ]]; then
   source ~/.rc/exports
