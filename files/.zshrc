@@ -49,9 +49,6 @@ if has "mise"; then
   # fi
 fi
 
-# Set vi keybind
-bindkey -v
-
 # For fzf key-bindings
 # this should be sourced after `bindkey -v`
 [[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh

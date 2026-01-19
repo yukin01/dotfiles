@@ -3,9 +3,14 @@
 # zsh 固有の設定
 #
 
+# 配列をユニークにする
 typeset -gU PATH path fpath
 
+# ls コマンドの色付け
 LS_COLORS=${LS_COLORS:-'di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'}
+
+# Set vi keybind
+bindkey -v
 
 #
 # 補完
@@ -57,3 +62,19 @@ setopt HIST_BEEP              # 履歴がないときビープ
 #
 
 alias history-stat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
+
+#
+# エイリアス自動展開
+#
+function expand-abbreviation() {
+  local words=(${(z)LBUFFER})
+  local word="${words[-1]}"
+  local excludes=("ls" "rm" "mv" "cp")
+
+  if [[ "${word[1]}" != '\' && ! ${excludes[(r)$word]} ]]; then
+    zle _expand_alias
+  fi
+  zle self-insert
+}
+zle -N expand-abbreviation
+bindkey ' ' expand-abbreviation
