@@ -6,12 +6,20 @@
     "allow": [
       "Bash(gh pr view:*)",
       "Bash(gh pr diff:*)",
-      "Bash(gh issue view:*)"
+      "Bash(gh pr list:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh issue list:*)",
+      "Bash(gh project item-list:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git push -u origin:*)",
+      "Bash(tail)",
+      "Bash(terraform fmt:*)",
+      "WebFetch"
     ],
     "deny": [],
-    "ask": []
+    "ask": [],
+    "defaultMode": "plan"
   },
-  "model": "sonnet",
   "hooks": {
     "Stop": [
       {
@@ -25,5 +33,6 @@
       }
     ]
   },
-  "language": "Japanese"
+  "language": "Japanese",
+  "plansDirectory": "./.local/plans"
 }
