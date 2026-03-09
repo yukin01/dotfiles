@@ -10,11 +10,13 @@
       "Bash(gh issue view:*)",
       "Bash(gh issue list:*)",
       "Bash(gh project item-list:*)",
+      "Bash(gh project item-add:*)",
       "Bash(git rev-parse:*)",
       "Bash(git push -u origin:*)",
       "Bash(tail)",
       "Bash(terraform fmt:*)",
-      "WebFetch"
+      "WebFetch",
+      "WebSearch"
     ],
     "deny": [],
     "ask": [],
@@ -33,6 +35,7 @@
       }
     ]
   },
+  "enabledPlugins": {},
   "language": "Japanese",
   "plansDirectory": "./.local/plans"
 }
