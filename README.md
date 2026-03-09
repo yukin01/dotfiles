@@ -54,7 +54,7 @@ For `kubectl`, don't enable *Docker for Mac*'s k8s option before installing *Min
 ### Tools
 
 ```bash
-$ ./scripts/04-setup-asdf.sh
+$ ./scripts/04-setup-mise.sh
 $ ./scripts/05-setup-tools.sh
 ```
 
@@ -133,3 +133,4 @@ $ ansible-playbook -i hosts ubuntu.yml --ask-become-pass
 - [dotfilesリポジトリで管理したgitconfigはHOMEではなくXDG_CONFIG_HOME配下に置くとよい](https://horimisli.me/entry/git-config-location/)
 - [dotfilesのこだわりを晒す](https://www.m3tech.blog/entry/dotfiles-bonsai)
 - [M1のMacにHomebrewをインストールしてPATHを通す](https://motomichi-works.hatenablog.com/entry/2022/02/06/000215)
+- [Rust製ツールまみれのdotfilesを始めた](https://zenn.dev/5ei74r0/articles/create-dotfiles)
