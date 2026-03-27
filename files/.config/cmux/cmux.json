@@ -1,0 +1,43 @@
+{
+  "commands": [
+    {
+      "name": "dev",
+      "description": "IDE-like layout: filer + editor + terminal",
+      "workspace": {
+        "layout": {
+          "direction": "vertical",
+          "split": 0.7,
+          "children": [
+            {
+              "direction": "horizontal",
+              "split": 0.25,
+              "children": [
+                {
+                  "pane": {
+                    "surfaces": [
+                      { "type": "terminal", "name": "filer" }
+                    ]
+                  }
+                },
+                {
+                  "pane": {
+                    "surfaces": [
+                      { "type": "terminal", "name": "editor", "focus": true }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "pane": {
+                "surfaces": [
+                  { "type": "terminal", "name": "terminal" }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

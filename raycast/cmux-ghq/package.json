@@ -1,0 +1,35 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "cmux-ghq",
+  "title": "cmux ghq",
+  "description": "Search ghq repositories and open in cmux",
+  "icon": "extension-icon.png",
+  "author": "yukin01",
+  "categories": ["Developer Tools"],
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "index",
+      "title": "Search Repositories",
+      "description": "Search ghq repositories and open in cmux",
+      "mode": "view"
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "^1.98.0",
+    "@raycast/utils": "^1.19.0"
+  },
+  "devDependencies": {
+    "@raycast/eslint-config": "^1.0.11",
+    "@types/node": "22.14.0",
+    "@types/react": "19.0.10",
+    "eslint": "^9.23.0",
+    "typescript": "^5.8.2"
+  },
+  "scripts": {
+    "build": "ray build",
+    "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
+    "lint": "ray lint"
+  }
+}

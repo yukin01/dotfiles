@@ -90,6 +90,14 @@ function get-current-shell() {
   fi
 }
 
+# cmux: IDE-like 3-pane layout (filer | editor / terminal)
+function cmux-dev() {
+  # split down: top (work area) + bottom (terminal)
+  cmux new-split down > /dev/null
+  # split top pane right: left (filer) + right (editor)
+  cmux new-split right --surface "$CMUX_SURFACE_ID" > /dev/null
+}
+
 function kubectl() {
   unset -f kubectl
   # lazy load

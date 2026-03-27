@@ -11,6 +11,9 @@
 !ghostty/config
 !pnpm/rc
 !sheldon/plugins.toml
+!cmux/cmux.json
+!yazi/yazi.toml
+!lazygit/config.yml
 
 # ignore list
 gh/hosts.yml
