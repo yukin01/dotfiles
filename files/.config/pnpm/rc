@@ -1,1 +1,3 @@
 minimum-release-age=1440
+ignore-scripts=true
+save-prefix=
