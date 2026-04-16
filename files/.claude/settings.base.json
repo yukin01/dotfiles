@@ -1,6 +1,7 @@
 {
   "env": {
-    "DISABLE_AUTOUPDATER": "1"
+    "DISABLE_AUTOUPDATER": "1",
+    "EDITOR": "vim"
   },
   "permissions": {
     "allow": [
@@ -13,7 +14,9 @@
       "Bash(gh project item-add:*)",
       "Bash(git rev-parse:*)",
       "Bash(git push -u origin:*)",
-      "Bash(tail)",
+      "Bash(tail:*)",
+      "Bash(grep:*)",
+      "Bash(mkdir:*)",
       "Bash(terraform fmt:*)",
       "WebFetch",
       "WebSearch"
@@ -29,13 +32,27 @@
         "hooks": [
           {
             "type": "command",
-            "command": "afplay /System/Library/Sounds/Funk.aiff"
+            "command": "[ -z \"$CMUX_BUNDLE_ID\" ] && afplay /System/Library/Sounds/Funk.aiff || true"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -z \"$CMUX_BUNDLE_ID\" ] && afplay /System/Library/Sounds/Funk.aiff || true"
           }
         ]
       }
     ]
   },
-  "enabledPlugins": {},
+  "enabledPlugins": {
+    "plugin-dev@claude-plugins-official": true
+  },
   "language": "Japanese",
+  "effortLevel": "high",
   "plansDirectory": "./.local/plans"
 }
