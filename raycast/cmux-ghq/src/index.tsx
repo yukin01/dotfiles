@@ -66,18 +66,28 @@ const WORKSPACE_LAYOUT = {
   ],
 };
 
-function openInCmux(fullPath: string, name: string) {
-  const layout = JSON.stringify(WORKSPACE_LAYOUT);
-  const cmd = [
-    `existing=$(cmux list-workspaces | grep '${name}' | grep -o 'workspace:[0-9]*' | head -1)`,
-    `if [ -n "$existing" ]; then`,
-    `  cmux select-workspace --workspace "$existing"`,
-    `else`,
-    `  ws=$(cmux new-workspace --cwd '${fullPath}' --layout '${layout}' --focus true | awk '{print $2}') && cmux rename-workspace --workspace "$ws" '${name}'`,
-    `fi`,
-    `open -a cmux`,
-  ].join("\n");
+function openInCmux(
+  fullPath: string,
+  name: string,
+  existing: string | undefined,
+) {
+  let cmd: string;
+  if (existing) {
+    cmd = `cmux select-workspace --workspace '${existing}' && open -a cmux`;
+  } else {
+    const layout = JSON.stringify(WORKSPACE_LAYOUT);
+    cmd = `ws=$(cmux new-workspace --cwd '${fullPath}' --layout '${layout}' --focus true | awk '{print $2}') && cmux rename-workspace --workspace "$ws" '${name}' && open -a cmux`;
+  }
   run(cmd);
+}
+
+function parseWorkspaces(stdout: string): Map<string, string> {
+  const map = new Map<string, string>();
+  for (const line of stdout.split("\n")) {
+    const m = line.match(/(workspace:\d+)\s+(\S+)/);
+    if (m) map.set(m[2], m[1]);
+  }
+  return map;
 }
 
 export default function Command() {
@@ -101,6 +111,11 @@ export default function Command() {
         .trim()
         .split("\n")
         .filter((line) => line.length > 0),
+  });
+
+  const { data: workspaces } = useExec("cmux", ["workspace", "list"], {
+    env: { PATH },
+    parseOutput: ({ stdout }) => parseWorkspaces(stdout),
   });
 
   if (rootError || listError) {
@@ -128,7 +143,7 @@ export default function Command() {
                   title="Open in cmux"
                   onAction={async () => {
                     await closeMainWindow();
-                    openInCmux(fullPath, displayName);
+                    openInCmux(fullPath, displayName, workspaces?.get(displayName));
                   }}
                 />
                 <Action
