@@ -24,8 +24,8 @@ if [ -d ~/.rc ]; then
   source ~/.rc/functions
 fi
 
-# scripts for business
-[ -f ~/scripts-for-business/files/.envrc ] && source ~/scripts-for-business/files/.envrc
+# workfiles
+[ -f ~/workfiles/files/.envrc ] && source ~/workfiles/files/.envrc
 
 # set vi keybind
 set -o vi

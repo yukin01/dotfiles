@@ -36,8 +36,8 @@ if [[ -d ~/.rc ]]; then
   source ~/.rc/zsh-options
 fi
 
-# Scripts for business
-[[ -f ~/scripts-for-business/files/.envrc ]] && source ~/scripts-for-business/files/.envrc
+# Workfiles
+[[ -f ~/workfiles/files/.envrc ]] && source ~/workfiles/files/.envrc
 
 # Activate mise
 if has "mise"; then
