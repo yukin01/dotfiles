@@ -1,6 +1,8 @@
 import { Action, ActionPanel, List, closeMainWindow } from "@raycast/api";
 import { useExec } from "@raycast/utils";
 import { spawn } from "node:child_process";
+import { readFileSync } from "node:fs";
+import { homedir } from "node:os";
 import { join } from "node:path";
 
 const PATH = [
@@ -9,6 +11,9 @@ const PATH = [
   "/usr/bin",
   process.env.PATH,
 ].join(":");
+
+const CMUX_CONFIG_PATH = join(homedir(), ".config/cmux/cmux.json");
+const WORKSPACE_TEMPLATE = "dotfiles";
 
 function run(command: string) {
   console.log("exec:", command);
@@ -20,51 +25,18 @@ function run(command: string) {
   child.unref();
 }
 
-const WORKSPACE_LAYOUT = {
-  direction: "horizontal",
-  split: 0.4,
-  children: [
-    {
-      direction: "vertical",
-      split: 0.6,
-      children: [
-        {
-          pane: {
-            surfaces: [
-              { type: "terminal", name: "lazygit", command: "lazygit" },
-              { type: "terminal", name: "yazi", command: "yazi" },
-            ],
-          },
-        },
-        {
-          pane: {
-            surfaces: [{ type: "terminal", name: "shell" }],
-          },
-        },
-      ],
-    },
-    {
-      direction: "vertical",
-      split: 0.5,
-      children: [
-        {
-          pane: {
-            surfaces: [
-              { type: "terminal", name: "claude", command: "claude", focus: true },
-            ],
-          },
-        },
-        {
-          pane: {
-            surfaces: [
-              { type: "terminal", name: "claude", command: "claude", focus: true },
-            ],
-          },
-        },
-      ],
-    },
-  ],
-};
+function loadLayout(): unknown {
+  const cfg = JSON.parse(readFileSync(CMUX_CONFIG_PATH, "utf8"));
+  const template = cfg.commands?.find(
+    (c: { name?: string }) => c.name === WORKSPACE_TEMPLATE,
+  );
+  if (!template?.workspace?.layout) {
+    throw new Error(
+      `cmux workspace template "${WORKSPACE_TEMPLATE}" not found in ${CMUX_CONFIG_PATH}`,
+    );
+  }
+  return template.workspace.layout;
+}
 
 function openInCmux(
   fullPath: string,
@@ -75,7 +47,7 @@ function openInCmux(
   if (existing) {
     cmd = `cmux select-workspace --workspace '${existing}' && open -a cmux`;
   } else {
-    const layout = JSON.stringify(WORKSPACE_LAYOUT);
+    const layout = JSON.stringify(loadLayout());
     cmd = `ws=$(cmux new-workspace --cwd '${fullPath}' --layout '${layout}' --focus true | awk '{print $2}') && cmux rename-workspace --workspace "$ws" '${name}' && open -a cmux`;
   }
   run(cmd);

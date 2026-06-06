@@ -16,6 +16,7 @@
 !cmux/README.md
 !yazi/yazi.toml
 !lazygit/config.yml
+!nvim/**
 
 # ignore list
 gh/hosts.yml

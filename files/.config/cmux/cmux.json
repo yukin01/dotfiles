@@ -13,22 +13,22 @@
   "commands": [
     {
       "name": "dotfiles",
-      "description": "4-pane dev layout: yazi + lazygit + shell + claude",
+      "description": "Dotfiles workspace: nvim + lazygit + shell + claude x2",
       "workspace": {
         "cwd": "~/dotfiles",
         "layout": {
           "direction": "horizontal",
-          "split": 0.4,
+          "split": 0.55,
           "children": [
             {
               "direction": "vertical",
-              "split": 0.6,
+              "split": 0.7,
               "children": [
                 {
                   "pane": {
                     "surfaces": [
-                      { "type": "terminal", "name": "lazygit", "command": "lazygit" },
-                      { "type": "terminal", "name": "yazi", "command": "yazi" }
+                      { "type": "terminal", "name": "nvim", "command": "nvim" },
+                      { "type": "terminal", "name": "lazygit", "command": "lazygit" }
                     ]
                   }
                 },
