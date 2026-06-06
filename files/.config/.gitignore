@@ -13,6 +13,7 @@
 !sheldon/plugins.toml
 !cmux/cmux.json
 !cmux/sidebars/**
+!cmux/README.md
 !yazi/yazi.toml
 !lazygit/config.yml
 
