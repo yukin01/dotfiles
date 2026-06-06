@@ -1,39 +1,54 @@
 {
   "commands": [
     {
-      "name": "dev",
-      "description": "IDE-like layout: filer + editor + terminal",
+      "name": "dotfiles",
+      "description": "4-pane dev layout: yazi + lazygit + shell + claude",
       "workspace": {
+        "cwd": "~/dotfiles",
         "layout": {
-          "direction": "vertical",
-          "split": 0.7,
+          "direction": "horizontal",
+          "split": 0.4,
           "children": [
             {
-              "direction": "horizontal",
-              "split": 0.25,
+              "direction": "vertical",
+              "split": 0.6,
               "children": [
                 {
                   "pane": {
                     "surfaces": [
-                      { "type": "terminal", "name": "filer" }
+                      { "type": "terminal", "name": "lazygit", "command": "lazygit" },
+                      { "type": "terminal", "name": "yazi", "command": "yazi" }
                     ]
                   }
                 },
                 {
                   "pane": {
                     "surfaces": [
-                      { "type": "terminal", "name": "editor", "focus": true }
+                      { "type": "terminal", "name": "shell" }
                     ]
                   }
                 }
               ]
             },
             {
-              "pane": {
-                "surfaces": [
-                  { "type": "terminal", "name": "terminal" }
-                ]
-              }
+              "direction": "vertical",
+              "split": 0.5,
+              "children": [
+                {
+                  "pane": {
+                    "surfaces": [
+                      { "type": "terminal", "name": "claude", "command": "claude", "focus": true }
+                    ]
+                  }
+                },
+                {
+                  "pane": {
+                    "surfaces": [
+                      { "type": "terminal", "name": "claude", "command": "claude", "focus": true }
+                    ]
+                  }
+                }
+              ]
             }
           ]
         }

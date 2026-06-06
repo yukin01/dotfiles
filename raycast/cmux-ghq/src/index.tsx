@@ -1,42 +1,100 @@
-import { Action, ActionPanel, List, closeMainWindow, showToast, Toast } from "@raycast/api";
+import { Action, ActionPanel, List, closeMainWindow } from "@raycast/api";
 import { useExec } from "@raycast/utils";
-import { exec } from "node:child_process";
+import { spawn } from "node:child_process";
 import { join } from "node:path";
 
-const PATH = ["/opt/homebrew/bin", "/usr/local/bin", "/usr/bin", process.env.PATH].join(":");
-const execOptions = { env: { ...process.env, PATH }, shell: "/bin/zsh" as const };
+const PATH = [
+  "/opt/homebrew/bin",
+  "/usr/local/bin",
+  "/usr/bin",
+  process.env.PATH,
+].join(":");
 
 function run(command: string) {
   console.log("exec:", command);
-  exec(command, execOptions, (error, stdout, stderr) => {
-    if (error) {
-      console.error("exec error:", error.message, stderr);
-      showToast({ style: Toast.Style.Failure, title: "Error", message: error.message });
-    } else if (stdout.trim()) {
-      console.log("stdout:", stdout.trim());
-    }
+  const child = spawn("/bin/zsh", ["-c", command], {
+    env: { ...process.env, PATH },
+    detached: true,
+    stdio: "ignore",
   });
+  child.unref();
 }
 
+const WORKSPACE_LAYOUT = {
+  direction: "horizontal",
+  split: 0.4,
+  children: [
+    {
+      direction: "vertical",
+      split: 0.6,
+      children: [
+        {
+          pane: {
+            surfaces: [
+              { type: "terminal", name: "lazygit", command: "lazygit" },
+              { type: "terminal", name: "yazi", command: "yazi" },
+            ],
+          },
+        },
+        {
+          pane: {
+            surfaces: [{ type: "terminal", name: "shell" }],
+          },
+        },
+      ],
+    },
+    {
+      direction: "vertical",
+      split: 0.5,
+      children: [
+        {
+          pane: {
+            surfaces: [
+              { type: "terminal", name: "claude", command: "claude", focus: true },
+            ],
+          },
+        },
+        {
+          pane: {
+            surfaces: [
+              { type: "terminal", name: "claude", command: "claude", focus: true },
+            ],
+          },
+        },
+      ],
+    },
+  ],
+};
+
 function openInCmux(fullPath: string, name: string) {
+  const layout = JSON.stringify(WORKSPACE_LAYOUT);
   const cmd = [
-    `existing=$(cmux list-workspaces | grep '${name}' | head -1 | awk '{print $2}')`,
+    `existing=$(cmux list-workspaces | grep '${name}' | grep -o 'workspace:[0-9]*' | head -1)`,
     `if [ -n "$existing" ]; then`,
     `  cmux select-workspace --workspace "$existing"`,
     `else`,
-    `  ws=$(cmux new-workspace --cwd '${fullPath}' --command cmux-dev | awk '{print $2}') && cmux rename-workspace --workspace "$ws" '${name}'`,
+    `  ws=$(cmux new-workspace --cwd '${fullPath}' --layout '${layout}' --focus true | awk '{print $2}') && cmux rename-workspace --workspace "$ws" '${name}'`,
     `fi`,
+    `open -a cmux`,
   ].join("\n");
   run(cmd);
 }
 
 export default function Command() {
-  const { data: ghqRoot, isLoading: isLoadingRoot, error: rootError } = useExec("ghq", ["root"], {
+  const {
+    data: ghqRoot,
+    isLoading: isLoadingRoot,
+    error: rootError,
+  } = useExec("ghq", ["root"], {
     env: { PATH },
     parseOutput: ({ stdout }) => stdout.trim(),
   });
 
-  const { data: repos, isLoading: isLoadingList, error: listError } = useExec("ghq", ["list"], {
+  const {
+    data: repos,
+    isLoading: isLoadingList,
+    error: listError,
+  } = useExec("ghq", ["list"], {
     env: { PATH },
     parseOutput: ({ stdout }) =>
       stdout
@@ -50,7 +108,10 @@ export default function Command() {
   }
 
   return (
-    <List isLoading={isLoadingRoot || isLoadingList} searchBarPlaceholder="Search repositories...">
+    <List
+      isLoading={isLoadingRoot || isLoadingList}
+      searchBarPlaceholder="Search repositories..."
+    >
       {repos?.map((repo) => {
         const fullPath = ghqRoot ? join(ghqRoot, repo) : repo;
         const parts = repo.split("/");
@@ -78,7 +139,11 @@ export default function Command() {
                     run(`code '${fullPath}'`);
                   }}
                 />
-                <Action.CopyToClipboard title="Copy Path" content={fullPath} shortcut={{ modifiers: ["cmd", "shift"], key: "c" }} />
+                <Action.CopyToClipboard
+                  title="Copy Path"
+                  content={fullPath}
+                  shortcut={{ modifiers: ["cmd", "shift"], key: "c" }}
+                />
               </ActionPanel>
             }
           />
