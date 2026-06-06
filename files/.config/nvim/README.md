@@ -20,6 +20,7 @@ dotfiles で管理している neovim 設定。Lua + [lazy.nvim](https://github.
         ├── lualine.lua      -- nvim-lualine/lualine.nvim
         ├── snacks.lua       -- folke/snacks.nvim (dashboard)
         ├── neo-tree.lua     -- nvim-neo-tree/neo-tree.nvim (サイドバー)
+        ├── bufferline.lua   -- akinsho/bufferline.nvim (タブバー)
         ├── fzf.lua          -- ibhagwan/fzf-lua
         └── lazygit.lua      -- kdheepak/lazygit.nvim
 
@@ -52,6 +53,17 @@ leader = **`<Space>`**
 | `H` | 隠しファイル toggle (gitignored 含む) |
 | `?` | ヘルプ |
 | `q` | 閉じる |
+
+### バッファ (タブ切り替え)
+
+| キー | 動作 |
+|---|---|
+| `<leader>fb` | fzf-lua でバッファ一覧から選択 |
+| `<C-^>` | 直前のバッファに戻る (vim builtin) |
+| `<leader>bd` | 現在のバッファを閉じる |
+| `<leader>bp` | バッファをピン留め |
+| `<leader>bo` | 他のバッファを全部閉じる |
+| `:bn` / `:bp` | 次/前のバッファ (使う場合) |
 
 ### 検索 (fzf-lua)
 

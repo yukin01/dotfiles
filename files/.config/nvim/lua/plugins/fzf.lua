@@ -10,6 +10,14 @@ return {
       { "<leader>fh", "<cmd>FzfLua help_tags<CR>", desc = "Help tags" },
       { "<leader>fr", "<cmd>FzfLua resume<CR>",    desc = "Resume" },
     },
-    opts = {},
+    opts = {
+      files = {
+        fd_opts = "--color=never --type f --hidden --follow --exclude .git",
+        rg_opts = "--color=never --files --hidden --follow -g '!.git/'",
+      },
+      grep = {
+        rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --hidden -g '!.git/' -e",
+      },
+    },
   },
 }
