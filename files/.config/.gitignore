@@ -12,6 +12,7 @@
 !pnpm/rc
 !sheldon/plugins.toml
 !cmux/cmux.json
+!cmux/sidebars/**
 !yazi/yazi.toml
 !lazygit/config.yml
 
