@@ -1,4 +1,15 @@
 {
+  "app": {
+    "appearance": "dark",
+    "appIcon": "light",
+    "warnBeforeQuit": true
+  },
+  "browser": {
+    "openTerminalLinksInCmuxBrowser": false
+  },
+  "sidebarAppearance": {
+    "tintOpacity": 0.18
+  },
   "commands": [
     {
       "name": "dotfiles",
