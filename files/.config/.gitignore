@@ -14,6 +14,7 @@
 !cmux/cmux.json
 !cmux/sidebars/**
 !cmux/README.md
+!herdr/config.toml
 !yazi/yazi.toml
 !lazygit/config.yml
 !nvim/**

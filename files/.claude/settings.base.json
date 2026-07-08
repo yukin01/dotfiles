@@ -39,6 +39,17 @@
     "defaultMode": "plan"
   },
   "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/dotfiles/bin/herdr-claude-title"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "matcher": "",

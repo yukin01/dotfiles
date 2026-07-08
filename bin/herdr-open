@@ -1,0 +1,103 @@
+#!/bin/bash
+set -euo pipefail
+
+# herdr に nvim/shell/claude の定型レイアウトを開く
+#
+#   ┌──────────── 0.55 ────────────┬──────── 0.45 ────────┐
+#   │ nvim            0.7          │ claude (focused)      │
+#   ├──────────────────────────────┤                       │
+#   │ shell           0.3          │                       │
+#   └──────────────────────────────┴───────────────────────┘
+#
+# usage: herdr-open [-w [branch]] [path] [label]
+#   path:   対象ディレクトリ (省略時: アクティブペインの cwd → $PWD)
+#   label:  workspace 名 (省略時: path の basename)
+#   -w:     path のリポジトリから git worktree を作り、専用 workspace にレイアウトを開く。
+#           branch 省略時は対話プロンプトで入力 (herdr の type=pane コマンド向け)。
+#
+# worktree モード以外の挙動:
+#   herdr 内部 (カスタムコマンド or 管理下シェル) なら現在の workspace に新しいタブを追加。
+#   herdr 外部なら label が一致する既存 workspace に focus、なければ workspace を新規作成。
+
+# herdr の shell コマンドは非ログインシェルで走る可能性があるため PATH を補う
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+
+WORKTREE=""
+BRANCH=""
+if [ "${1:-}" = "-w" ]; then
+  WORKTREE=1
+  shift
+  # 次の引数が既存パスでなければ branch 名とみなす
+  if [ $# -gt 0 ] && [ ! -d "$1" ]; then
+    BRANCH="$1"
+    shift
+  fi
+fi
+
+CWD="${1:-${HERDR_ACTIVE_PANE_CWD:-$PWD}}"
+CWD=$(cd "$CWD" && pwd)
+LABEL="${2:-$(basename "$CWD")}"
+
+build_layout() {
+  local root=$1 cwd=$2 claude
+  claude=$(herdr pane split "$root" --direction right --ratio 0.55 --cwd "$cwd" --focus | jq -r '.result.pane.pane_id')
+  herdr pane split "$root" --direction down --ratio 0.7 --cwd "$cwd" --no-focus >/dev/null
+
+  herdr pane rename "$root" nvim >/dev/null
+  herdr pane run "$root" nvim
+
+  herdr pane rename "$claude" claude >/dev/null
+  herdr pane run "$claude" claude
+}
+
+if [ -n "$WORKTREE" ]; then
+  if [ -z "$BRANCH" ]; then
+    printf "branch: "
+    read -r BRANCH
+    [ -n "$BRANCH" ] || exit 1
+  fi
+
+  # origin があれば最新の default branch を fetch して分岐元にする
+  base_args=()
+  if git -C "$CWD" remote get-url origin >/dev/null 2>&1; then
+    default=$(git -C "$CWD" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | cut -d/ -f2-)
+    if [ -z "$default" ]; then
+      for c in main master; do
+        git -C "$CWD" show-ref --verify -q "refs/remotes/origin/$c" && { default=$c; break; }
+      done
+    fi
+    if [ -n "$default" ]; then
+      echo "fetching origin/$default..."
+      git -C "$CWD" fetch origin "$default" --quiet || true
+      base_args=(--base "origin/$default")
+    fi
+  fi
+
+  result=$(herdr worktree create --cwd "$CWD" --branch "$BRANCH" "${base_args[@]+"${base_args[@]}"}" --focus --json)
+  root=$(jq -r '.result.root_pane.pane_id' <<<"$result")
+  wt_cwd=$(jq -r '.result.root_pane.cwd' <<<"$result")
+
+  # リモート追跡ブランチ起点だと upstream が origin/main になってしまうので外す
+  git -C "$wt_cwd" branch --unset-upstream 2>/dev/null || true
+  build_layout "$root" "$wt_cwd"
+  exit 0
+fi
+
+# HERDR_ACTIVE_WORKSPACE_ID: カスタムコマンド経由 / HERDR_WORKSPACE_ID: 管理下プロセス
+WS="${HERDR_ACTIVE_WORKSPACE_ID:-${HERDR_WORKSPACE_ID:-}}"
+
+if [ -n "$WS" ]; then
+  root=$(herdr tab create --workspace "$WS" --cwd "$CWD" --focus | jq -r '.result.root_pane.pane_id')
+  build_layout "$root" "$CWD"
+  exit 0
+fi
+
+existing=$(herdr workspace list | jq -r --arg l "$LABEL" '[.result.workspaces[] | select(.label == $l) | .workspace_id] | first // empty')
+if [ -n "$existing" ]; then
+  herdr workspace focus "$existing" >/dev/null
+  exit 0
+fi
+
+ws_id=$(herdr workspace create --cwd "$CWD" --label "$LABEL" | jq -r '.result.workspace.workspace_id')
+root=$(herdr pane list --workspace "$ws_id" | jq -r '.result.panes[0].pane_id')
+build_layout "$root" "$CWD"

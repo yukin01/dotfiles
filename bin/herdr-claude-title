@@ -1,0 +1,29 @@
+#!/bin/bash
+set -euo pipefail
+
+# Claude Code の UserPromptSubmit hook から呼ばれ、セッション最初のプロンプトを
+# セッション名として herdr の agents パネルに報告する。
+# herdr 管理外 (HERDR_PANE_ID なし) では何もしない。
+
+[ -n "${HERDR_PANE_ID:-}" ] || exit 0
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+
+input=$(cat)
+
+session_id=$(jq -r '.session_id // empty' <<<"$input")
+[ -n "$session_id" ] || exit 0
+
+# ペイン x セッションごとに一度だけ報告する (最初のプロンプト = セッション名)
+marker="${TMPDIR:-/tmp}/herdr-claude-title-${HERDR_PANE_ID//:/_}-${session_id}"
+[ -e "$marker" ] && exit 0
+
+# 改行を潰して先頭40文字 (jq のスライスは codepoint 単位なので日本語も安全)
+title=$(jq -r '.prompt // "" | gsub("[\\r\\n]+"; " ") | .[0:40]' <<<"$input")
+[ -n "$title" ] || exit 0
+
+# title: ペイン枠のタイトル / display-agent: サイドバー agents エリアの表示名
+herdr pane report-metadata "$HERDR_PANE_ID" --source claude-code-hook \
+  --title "$title" --display-agent "$title" >/dev/null 2>&1 || exit 0
+
+touch "$marker"
