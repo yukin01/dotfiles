@@ -148,8 +148,6 @@ brew "ynqa/tap/jnv", trusted: true
 cask "claude"
 # Terminal-based AI coding assistant
 cask "claude-code"
-# Ghostty-based terminal with vertical tabs and notifications for AI coding agents
-cask "cmux"
 # API documentation browser and code snippet manager
 cask "dash@6"
 # Voice and text chat software
