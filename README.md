@@ -66,6 +66,19 @@ Generate `~/.claude/settings.json` from `settings.base.json`.
 $ ./scripts/06-setup-claude.sh
 ```
 
+### Bootstrap
+
+Casks and macOS defaults declared in `mise.toml` (repo root) are applied as part of `04-setup-mise.sh`.
+To apply them manually:
+
+```bash
+$ mise trust
+$ mise bootstrap packages apply
+$ mise bootstrap macos defaults apply
+```
+
+Casks managed here are updated with `mise bootstrap packages upgrade`, separately from `mise up`.
+
 ### iTerm2
 
 - color theme: [Dracula](https://github.com/dracula/iterm)
@@ -78,12 +91,6 @@ $ ./scripts/06-setup-claude.sh
   - https://manual.raycast.com/hotkey
 - System Settings > Keyboard > Text Input > Edit...
   - Add Google Japanese IME
-  - Disable below
-    - *Use smart quotes and dashes*
-    - *Correct spelling automatically*
-    - *Capitalize words automatically*
-    - *Show inline predictive text*
-    - *Add period with double-space*
   - Swap CapsLock and Ctrl
 - Login below
   - Visual Studio Code

@@ -20,3 +20,18 @@ fi
 echo ""
 echo "✅ Mise tools are installed successfully."
 echo ""
+
+echo ""
+echo "===== Apply mise bootstrap (casks & macOS defaults) ====="
+echo ""
+
+# pkg 型 cask のインストールで sudo のパスワードを求められることがある
+set -x
+mise trust "$HOME/dotfiles/mise.toml"
+mise -C "$HOME/dotfiles" bootstrap packages apply --yes
+mise -C "$HOME/dotfiles" bootstrap macos defaults apply --yes
+{ set +x; } 2>/dev/null
+
+echo ""
+echo "✅ Mise bootstrap is applied successfully."
+echo ""

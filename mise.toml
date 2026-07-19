@@ -1,0 +1,36 @@
+# Machine bootstrap config, applied with `mise bootstrap` (run in this directory or via -C ~/dotfiles).
+# Daily [tools] live in files/.config/mise/config.toml and are updated with `mise up`;
+# packages here are updated separately with `mise bootstrap packages upgrade`.
+
+[bootstrap.packages]
+"brew-cask:dash@6" = "latest"
+"brew-cask:discord" = "latest"
+"brew-cask:dropbox" = "latest"
+"brew-cask:font-hackgen-nerd" = "latest"
+"brew-cask:font-jetbrains-mono-nerd-font" = "latest"
+"brew-cask:font-ubuntu-mono-nerd-font" = "latest"
+"brew-cask:iterm2" = "latest"
+"brew-cask:notion" = "latest"
+"brew-cask:postman" = "latest"
+"brew-cask:rancher" = "latest"
+"brew-cask:sequel-ace" = "latest"
+"brew-cask:session-manager-plugin" = "latest"
+"brew-cask:slack" = "latest"
+"brew-cask:slack-cli" = "latest"
+"brew-cask:tableplus" = "latest"
+"brew-cask:visual-studio-code" = "latest"
+
+# System Settings > Keyboard > Text Input > Edit... の手動設定を宣言化したもの
+[bootstrap.macos.defaults.NSGlobalDomain]
+# Capitalize words automatically（語頭を自動的に大文字にする）
+NSAutomaticCapitalizationEnabled = false
+# Use smart quotes and dashes のダッシュ側（-- を — に自動変換）
+NSAutomaticDashSubstitutionEnabled = false
+# Show inline predictive text（インライン入力予測の表示）
+NSAutomaticInlinePredictionEnabled = false
+# Add period with double-space（スペース2回でピリオドを挿入）
+NSAutomaticPeriodSubstitutionEnabled = false
+# Use smart quotes and dashes の引用符側（'' を “” に自動変換）
+NSAutomaticQuoteSubstitutionEnabled = false
+# Correct spelling automatically（スペルの自動修正）
+NSAutomaticSpellingCorrectionEnabled = false

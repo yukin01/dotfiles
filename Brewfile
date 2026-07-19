@@ -40,52 +40,22 @@ brew "zsh"
 cask "claude"
 # Terminal-based AI coding assistant
 cask "claude-code"
-# API documentation browser and code snippet manager
-cask "dash@6"
-# Voice and text chat software
-cask "discord"
-# Client for the Dropbox cloud storage service
-cask "dropbox"
-# Web browser
+# Web browser (mise の cask shim が auto_updates + preflight を拒否するため brew 管理)
 cask "firefox"
-cask "font-hackgen-nerd"
-cask "font-jetbrains-mono-nerd-font"
-cask "font-ubuntu-mono-nerd-font"
 # Set of tools to manage resources and applications hosted on Google Cloud
+# (.rc/functions の gcloud 補完が $(brew --prefix)/share/google-cloud-sdk に依存するため brew 管理)
 cask "gcloud-cli"
 # Terminal emulator that uses platform-native UI and GPU acceleration
 cask "ghostty"
 # Web browser
 cask "google-chrome"
-# Client for the Google Drive storage service
+# Client for the Google Drive storage service (pkg + File Provider 統合が sudo 必須のため brew 管理)
 cask "google-drive"
 # Japanese input software
 cask "google-japanese-ime"
-# Terminal emulator as alternative to Apple's Terminal app
-cask "iterm2"
 # Software for Logitech devices
 cask "logi-options+"
-# Optimise your webcam, headset, and Logi Dock for video meetings
-cask "logitune"
-# App to write, plan, collaborate, and get organised
-cask "notion"
-# Collaboration platform for API development
-cask "postman"
-# Kubernetes and container management on the desktop
-cask "rancher"
 # Control your tools with a few keystrokes
 cask "raycast"
-# MySQL/MariaDB database management
-cask "sequel-ace"
-# Plugin for AWS CLI to start and end sessions that connect to managed instances
-cask "session-manager-plugin"
-# Team communication and collaboration software
-cask "slack"
-# CLI to create, run, and deploy Slack apps
-cask "slack-cli"
-# Native GUI tool for relational databases
-cask "tableplus"
-# Open-source code editor
-cask "visual-studio-code"
-# Video communication and virtual meeting platform
+# Video communication and virtual meeting platform (postflight が mise の cask shim で失敗するため brew 管理)
 cask "zoom"
