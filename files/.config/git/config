@@ -8,6 +8,9 @@
 	format = ssh
 [commit]
 	gpgsign = true
+[hook "gitleaks"]
+	event = pre-commit
+	command = gitleaks protect --staged --no-banner
 
 ##
 ## delta config
