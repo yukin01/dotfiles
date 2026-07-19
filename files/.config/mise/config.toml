@@ -1,20 +1,59 @@
 [tools]
-node = "24"
+# Language runtimes
+bun = "latest"
 deno = "2.6"
+node = "24"
 ruby = "3.4"
-kubectl = "1.33"
-kustomize = "5.8"
-helm = "3.19"
-argocd = "3.2"
-argo-rollouts = "1.8"
+uv = "latest"
+
+# JS package managers
 "npm:pnpm" = "latest"
-"npm:prettier" = "latest"
-"npm:aws-cdk" = "latest"
-"npm:firebase-tools" = "latest"
-"npm:serverless" = "latest"
+"npm:yarn" = "latest"
+
+# Kubernetes
+argo-rollouts = "1.8"
+argocd = "3.2"
+dyff = "latest"
+helm = "3.19"
+k9s = "latest"
+kind = "latest"
+kube-score = "latest"
+kubeconform = "latest"
+kubectl = "1.33"
+kubectx = "latest"
+kubens = "latest"
+kustomize = "5.8"
+pluto = "latest"
+skaffold = "latest"
+trivy = "latest"
+
+# Terraform / IaC
+sops = "latest"
+terraform-docs = "latest"
+tflint = "latest"
+tfupdate = "latest"
+
+# CI / Lint
+act = "latest"
+actionlint = "latest"
+hadolint = "latest"
+pinact = "latest"
+shellcheck = "latest"
+zizmor = "latest"
+
+# CLI utilities
+jnv = "latest"
+
+# npm packages
 "npm:@google/gemini-cli" = "latest"
-"npm:ccusage" = "latest"
 "npm:@marp-team/marp-cli" = "latest"
+"npm:aws-cdk" = "latest"
+"npm:ccusage" = "latest"
+"npm:firebase-tools" = "latest"
+"npm:prettier" = "latest"
+"npm:serverless" = "latest"
+
+# pipx packages
 "pipx:ansible-core" = "latest"
 
 [settings]
