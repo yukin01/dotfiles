@@ -40,6 +40,7 @@ tfupdate = "latest"
 # CI / Lint
 act = "latest"
 actionlint = "latest"
+gitleaks = "latest"
 hadolint = "latest"
 pinact = "latest"
 shellcheck = "latest"
@@ -51,10 +52,18 @@ gh = "latest"
 ghq = "latest"
 lazygit = "latest"
 
+# Terminal environment
+direnv = "latest"
+herdr = "latest"
+neovim = "latest"
+sheldon = "latest"
+starship = "latest"
+
 # CLI utilities
 bat = "latest"
 fd = "latest"
 fx = "latest"
+fzf = "latest"
 jnv = "latest"
 jq = "latest"
 peco = "latest"

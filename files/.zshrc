@@ -51,4 +51,4 @@ fi
 
 # For fzf key-bindings
 # this should be sourced after `bindkey -v`
-[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
+has "fzf" && source <(fzf --zsh)

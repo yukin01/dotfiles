@@ -5,20 +5,6 @@ set -eu
 source "$(dirname "$0")/../lib/utils.sh"
 
 echo ""
-echo "===== Install fzf settings ====="
-echo ""
-
-if has "brew" && has "fzf" ; then
-  set -x
-  "$(brew --prefix)"/opt/fzf/install --key-bindings --no-completion --no-update-rc
-  { set +x; } 2>/dev/null
-
-  echo ""
-  echo "✅ FZF is configured successfully."
-  echo ""
-fi
-
-echo ""
 echo "===== Login to github cli ====="
 echo ""
 

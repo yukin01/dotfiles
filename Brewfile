@@ -6,38 +6,24 @@ brew "ca-certificates"
 brew "awscli"
 # GNU File, Shell, and Text utilities
 brew "coreutils"
-# Load/unload environment variables based on $PWD
-brew "direnv"
 # Highly capable, feature-rich programming language
 brew "perl"
 # Debian package management system
 brew "dpkg"
-# Command-line fuzzy finder written in Go
-brew "fzf"
 # Distributed revision control system
 brew "git"
-# Audit git repos for secrets
-brew "gitleaks"
 # GNU implementation of the famous stream editor
 brew "gnu-sed"
 # GNU grep, egrep and fgrep
 brew "grep"
-# Agent multiplexer that lives in your terminal
-brew "herdr"
 # Improved top (interactive process viewer)
 brew "htop"
 # Ping-like tool for HTTP requests
 brew "httping"
 # Polyglot runtime manager (asdf rust clone)
 brew "mise"
-# Ambitious Vim-fork focused on extensibility and agility
-brew "neovim"
 # Port scanning utility for large networks
 brew "nmap"
-# Fast, configurable, shell plugin manager
-brew "sheldon"
-# Cross-shell prompt for astronauts
-brew "starship"
 # Text interface for Git repositories
 brew "tig"
 # Terminal multiplexer
