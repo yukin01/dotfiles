@@ -19,8 +19,7 @@ if ! git switch main --quiet 2>/dev/null; then
 fi
 
 info "Pulling latest"
-pull_output=$(git pull --quiet 2>&1) && true
-if [[ $? -ne 0 ]]; then
+if ! pull_output=$(git pull --quiet 2>&1); then
   err "Failed to pull"
   printf "  %s\n" "$pull_output" >&2
   exit 1

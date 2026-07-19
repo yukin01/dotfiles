@@ -33,20 +33,6 @@ if has "gh"; then
 fi
 
 echo ""
-echo "===== Install yarn global packages ====="
-echo ""
-
-if has "yarn"; then
-  set -x
-  yarn global add
-  { set +x; } 2>/dev/null
-
-  echo ""
-  echo "✅ Yarn global packages are installed successfully."
-  echo ""
-fi
-
-echo ""
 echo "===== Change default shell ====="
 echo ""
 

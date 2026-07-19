@@ -61,8 +61,6 @@ brew "herdr"
 brew "htop"
 # Ping-like tool for HTTP requests
 brew "httping"
-# Add GitHub support to git on the command-line
-brew "hub"
 # Configurable static site generator
 brew "hugo"
 # Lightweight and flexible command-line JSON processor

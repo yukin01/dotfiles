@@ -58,6 +58,14 @@ $ ./scripts/04-setup-mise.sh
 $ ./scripts/05-setup-tools.sh
 ```
 
+### Claude Code
+
+Generate `~/.claude/settings.json` from `settings.base.json`.
+
+```bash
+$ ./scripts/06-setup-claude.sh
+```
+
 ### iTerm2
 
 - color theme: [Dracula](https://github.com/dracula/iterm)
@@ -92,12 +100,6 @@ Clone this repo.
 
 ```bash
 $ bash -c "$(curl -fsSL dot.yukin01.dev)"
-```
-
-Install Powerline Fonts.
-
-```bash
-$ ./fonts/install.sh
 ```
 
 Configure SSH key pair.
