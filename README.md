@@ -77,7 +77,12 @@ $ mise bootstrap packages apply
 $ mise bootstrap macos defaults apply
 ```
 
-Casks managed here are updated with `mise bootstrap packages upgrade`, separately from `mise up`.
+Packages managed here are updated with `mise bootstrap packages upgrade`, separately from `mise up`.
+
+> [!WARNING]
+> `[bootstrap.packages]` の formula は brew の台帳（receipt）を持ったまま mise 管理になっているため、
+> `brew bundle cleanup --force` を実行すると削除されてしまう。formula の棚卸しは
+> `mise bootstrap packages prune` を使うこと。
 
 ### iTerm2
 

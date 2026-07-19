@@ -3,6 +3,27 @@
 # packages here are updated separately with `mise bootstrap packages upgrade`.
 
 [bootstrap.packages]
+# Formulae
+"brew:aws-vault" = "latest"
+"brew:awscli" = "latest"
+"brew:ca-certificates" = "latest"
+"brew:coreutils" = "latest"
+"brew:git" = "latest"
+"brew:gnu-sed" = "latest"
+"brew:grep" = "latest"
+"brew:htop" = "latest"
+"brew:httping" = "latest"
+"brew:nmap" = "latest"
+"brew:tig" = "latest"
+"brew:tmux" = "latest"
+"brew:tree" = "latest"
+"brew:vim" = "latest"
+"brew:wget" = "latest"
+"brew:zsh" = "latest"
+
+# Casks
+"brew-cask:claude" = "latest"
+"brew-cask:claude-code" = "latest"
 "brew-cask:dash@6" = "latest"
 "brew-cask:discord" = "latest"
 "brew-cask:dropbox" = "latest"
