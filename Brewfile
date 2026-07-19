@@ -1,13 +1,9 @@
-tap "aws/tap"
-tap "datadog-labs/pack"
 # Securely store and access AWS credentials in development environments
 brew "aws-vault"
 # Mozilla CA certificate store
 brew "ca-certificates"
 # Official Amazon AWS command-line interface
 brew "awscli"
-# Clone of cat(1) with syntax highlighting and Git integration
-brew "bat"
 # GNU File, Shell, and Text utilities
 brew "coreutils"
 # Load/unload environment variables based on $PWD
@@ -16,26 +12,14 @@ brew "direnv"
 brew "perl"
 # Debian package management system
 brew "dpkg"
-# Simple, fast and user-friendly alternative to find
-brew "fd"
-# Terminal JSON viewer
-brew "fx"
 # Command-line fuzzy finder written in Go
 brew "fzf"
-# GitHub command-line tool
-brew "gh"
-# Remote repository management made easy
-brew "ghq"
 # Distributed revision control system
 brew "git"
-# Syntax-highlighting pager for git and diff output
-brew "git-delta"
 # Audit git repos for secrets
 brew "gitleaks"
 # GNU implementation of the famous stream editor
 brew "gnu-sed"
-# Open source programming language to build simple/reliable/efficient software
-brew "go"
 # GNU grep, egrep and fgrep
 brew "grep"
 # Agent multiplexer that lives in your terminal
@@ -44,30 +28,16 @@ brew "herdr"
 brew "htop"
 # Ping-like tool for HTTP requests
 brew "httping"
-# Configurable static site generator
-brew "hugo"
-# Lightweight and flexible command-line JSON processor
-brew "jq"
-# Simple terminal UI for git commands
-brew "lazygit"
 # Polyglot runtime manager (asdf rust clone)
 brew "mise"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
 # Port scanning utility for large networks
 brew "nmap"
-# Simplistic interactive filtering tool
-brew "peco"
-# Python package management tool
-brew "poetry"
-# Search tool like grep and The Silver Searcher
-brew "ripgrep"
 # Fast, configurable, shell plugin manager
 brew "sheldon"
 # Cross-shell prompt for astronauts
 brew "starship"
-# OpenTofu / Terraform / Terragrunt / Terramate / Atmos version manager
-brew "tenv"
 # Text interface for Git repositories
 brew "tig"
 # Terminal multiplexer
@@ -78,16 +48,8 @@ brew "tree"
 brew "vim"
 # Internet file retriever
 brew "wget"
-# Blazing fast terminal file manager written in Rust, based on async I/O
-brew "yazi"
-# Process YAML, JSON, XML, CSV and properties documents from the CLI
-brew "yq"
 # UNIX shell (command interpreter)
 brew "zsh"
-# eks-node-viewer is a tool for visualizing dynamic node usage within an EKS cluster.
-brew "aws/tap/eks-node-viewer", trusted: true
-# Go-based command-line wrapper for easy interaction with Datadog APIs
-brew "datadog-labs/pack/pup", trusted: true
 # Anthropic's official Claude AI desktop app
 cask "claude"
 # Terminal-based AI coding assistant

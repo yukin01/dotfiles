@@ -5,6 +5,7 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 
 const PATH = [
+  join(homedir(), ".local/share/mise/shims"),
   "/opt/homebrew/bin",
   "/usr/local/bin",
   "/usr/bin",

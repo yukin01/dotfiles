@@ -1,9 +1,10 @@
 [tools]
 # Language runtimes
-bun = "latest"
 deno = "2.6"
 node = "24"
 ruby = "3.4"
+bun = "latest"
+go = "latest"
 uv = "latest"
 
 # JS package managers
@@ -13,25 +14,28 @@ uv = "latest"
 # Kubernetes
 argo-rollouts = "1.8"
 argocd = "3.2"
-dyff = "latest"
 helm = "3.19"
+kubectl = "1.33"
+kustomize = "5.8"
+dyff = "latest"
 k9s = "latest"
 kind = "latest"
 kube-score = "latest"
 kubeconform = "latest"
-kubectl = "1.33"
 kubectx = "latest"
 kubens = "latest"
-kustomize = "5.8"
 pluto = "latest"
 skaffold = "latest"
 trivy = "latest"
+"github:awslabs/eks-node-viewer" = { version = "latest", bin = "eks-node-viewer" }
 
-# Terraform / IaC
+# IaC / Infra
 sops = "latest"
 terraform-docs = "latest"
 tflint = "latest"
 tfupdate = "latest"
+"github:datadog-labs/pup" = "latest"
+"github:tofuutils/tenv" = "latest"
 
 # CI / Lint
 act = "latest"
@@ -41,8 +45,22 @@ pinact = "latest"
 shellcheck = "latest"
 zizmor = "latest"
 
+# Git tools
+delta = "latest"
+gh = "latest"
+ghq = "latest"
+lazygit = "latest"
+
 # CLI utilities
+bat = "latest"
+fd = "latest"
+fx = "latest"
 jnv = "latest"
+jq = "latest"
+peco = "latest"
+ripgrep = "latest"
+yazi = "latest"
+yq = "latest"
 
 # npm packages
 "npm:@google/gemini-cli" = "latest"
