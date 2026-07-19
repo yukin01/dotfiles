@@ -1,0 +1,48 @@
+#!/bin/bash
+set -euo pipefail
+
+green='\033[32m'
+yellow='\033[33m'
+red='\033[31m'
+dim='\033[2m'
+reset='\033[0m'
+
+info() { printf "${green}▶${reset} %s\n" "$1"; }
+ok()   { printf "${green}✓${reset} %s\n" "$1"; }
+warn() { printf "${yellow}!${reset} %s\n" "$1" >&2; }
+err()  { printf "${red}✗${reset} %s\n" "$1" >&2; }
+
+info "Switching to main"
+if ! git switch main --quiet 2>/dev/null; then
+  err "Failed to switch to main (uncommitted changes?)"
+  exit 1
+fi
+
+info "Pulling latest"
+pull_output=$(git pull --quiet 2>&1) && true
+if [[ $? -ne 0 ]]; then
+  err "Failed to pull"
+  printf "  %s\n" "$pull_output" >&2
+  exit 1
+fi
+ok "main is up to date"
+
+info "Fetching & pruning"
+git fetch --prune --quiet
+
+gone_branches=$(git branch -vv | grep ': gone]' | awk '{print $1}') || true
+
+if [[ -z "$gone_branches" ]]; then
+  ok "No stale branches"
+else
+  count=0
+  while IFS= read -r branch; do
+    if git branch -D "$branch" >/dev/null 2>&1; then
+      printf "  ${dim}deleted${reset} %s\n" "$branch"
+      ((count++))
+    else
+      warn "Failed to delete $branch"
+    fi
+  done <<< "$gone_branches"
+  ok "Removed $count branch(es)"
+fi
