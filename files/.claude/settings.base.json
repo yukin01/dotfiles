@@ -45,7 +45,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/dotfiles/bin/herdr-claude-title"
+            "command": "~/.claude/hooks/herdr-claude-title"
           }
         ]
       }
@@ -56,7 +56,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -z \"$CMUX_BUNDLE_ID\" ] && afplay /System/Library/Sounds/Funk.aiff || true"
+            "command": "afplay /System/Library/Sounds/Funk.aiff"
           }
         ]
       }
@@ -67,16 +67,21 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -z \"$CMUX_BUNDLE_ID\" ] && afplay /System/Library/Sounds/Funk.aiff || true"
+            "command": "afplay /System/Library/Sounds/Funk.aiff"
           }
         ]
       }
     ]
   },
   "enabledPlugins": {
-    "plugin-dev@claude-plugins-official": true
+    "plugin-dev@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true
   },
   "language": "Japanese",
   "effortLevel": "high",
-  "plansDirectory": "./.local/plans"
+  "plansDirectory": "./.local/plans",
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  }
 }

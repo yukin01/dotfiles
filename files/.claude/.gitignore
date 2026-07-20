@@ -1,0 +1,8 @@
+*
+!.gitignore
+!settings.base.json
+!CLAUDE.md
+!statusline-command.sh
+!hooks
+hooks/*
+!hooks/herdr-claude-title

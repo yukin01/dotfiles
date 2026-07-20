@@ -1,2 +1,2 @@
-files/.vim/autoload/plug.vim linguist-vendored
 iterm2/* linguist-vendored
+completions/zsh/_aws-vault linguist-vendored
