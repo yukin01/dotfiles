@@ -38,4 +38,4 @@ else
 fi
 
 # fzf bash completion and key-bindings
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+has "fzf" && eval "$(fzf --bash)"
