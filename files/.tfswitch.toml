@@ -1,5 +1,0 @@
-# TODO: Remove file
-# bin = "$HOME/bin/terraform"
-bin = "$HOME/dotfiles/bin/terraform"
-log-level = "DEBUG"
-default-version = "1.9.4"

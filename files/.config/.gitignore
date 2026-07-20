@@ -18,6 +18,7 @@
 !yazi/yazi.toml
 !lazygit/config.yml
 !nvim/**
+!vim/**
 
 # ignore list
 gh/hosts.yml
