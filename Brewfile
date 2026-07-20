@@ -1,5 +1,3 @@
-# Polyglot runtime manager (asdf rust clone) — bootstrap の起点なので Brewfile 管理
-brew "mise"
 # Web browser (mise の cask shim が auto_updates + preflight を拒否するため brew 管理)
 cask "firefox"
 # Set of tools to manage resources and applications hosted on Google Cloud

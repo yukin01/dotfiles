@@ -7,6 +7,13 @@ if  [ "$(uname -m)" = "arm64" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
+# Set common rc
+if [ -d ~/.rc ]; then
+  source ~/.rc/exports
+  source ~/.rc/aliases
+  source ~/.rc/functions
+fi
+
 # for direnv
 if has "direnv"; then
   eval "$(direnv hook bash)"
@@ -15,13 +22,6 @@ fi
 # Activate mise
 if has "mise"; then
   eval "$(mise activate bash)"
-fi
-
-# Set common rc
-if [ -d ~/.rc ]; then
-  source ~/.rc/exports
-  source ~/.rc/aliases
-  source ~/.rc/functions
 fi
 
 # workfiles

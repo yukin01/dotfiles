@@ -16,6 +16,9 @@ export PATH="$PATH:${KREW_ROOT:-$HOME/.krew}/bin"
 # custom commands
 export PATH=$PATH:$HOME/dotfiles/bin
 
+# mise (installed by https://mise.run) and other user-local binaries
+export PATH="$HOME/.local/bin:$PATH"
+
 # tenv
 export TENV_AUTO_INSTALL=true
 
