@@ -19,37 +19,5 @@ if has "gh"; then
 fi
 
 echo ""
-echo "===== Change default shell ====="
-echo ""
-
-if cat /etc/shells | grep "$(brew --prefix)/bin/zsh" &>/dev/null; then
-  echo ""
-  echo "✅ Zsh is already registered in /etc/shells."
-  echo ""
-else
-  set -x
-  echo "$(brew --prefix)/bin/zsh" | sudo tee -a /etc/shells
-  { set +x; } 2>/dev/null
-
-  echo ""
-  echo "✅ Zsh is registered in /etc/shells."
-  echo ""
-fi
-
-if [[ "$SHELL" == "$(brew --prefix)/bin/zsh" ]]; then
-  echo ""
-  echo "✅ Default shell is already zsh."
-  echo ""
-else
-  set -x
-  chsh -s "$(brew --prefix)/bin/zsh"
-  { set +x; } 2>/dev/null
-
-  echo ""
-  echo "✅ Default shell is changed to zsh."
-  echo ""
-fi
-
-echo ""
 echo "🎉 MacOS setup has been successfully completed."
 echo ""

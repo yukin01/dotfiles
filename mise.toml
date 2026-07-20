@@ -41,6 +41,10 @@
 "brew-cask:tableplus" = "latest"
 "brew-cask:visual-studio-code" = "latest"
 
+# ログインシェル（/etc/shells への登録と chsh を冪等に行う）
+[bootstrap.user]
+login_shell = "/opt/homebrew/bin/zsh"
+
 # System Settings > Keyboard > Text Input > Edit... の手動設定を宣言化したもの
 [bootstrap.macos.defaults.NSGlobalDomain]
 # Capitalize words automatically（語頭を自動的に大文字にする）
