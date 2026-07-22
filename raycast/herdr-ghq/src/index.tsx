@@ -1,4 +1,10 @@
-import { Action, ActionPanel, List, closeMainWindow } from "@raycast/api";
+import {
+  Action,
+  ActionPanel,
+  Keyboard,
+  List,
+  closeMainWindow,
+} from "@raycast/api";
 import { useExec } from "@raycast/utils";
 import { spawn } from "node:child_process";
 import { homedir } from "node:os";
@@ -142,7 +148,7 @@ export default function Command() {
                 />
                 <Action
                   title="Open in VS Code"
-                  shortcut={{ modifiers: ["cmd"], key: "o" }}
+                  shortcut={Keyboard.Shortcut.Common.Open}
                   onAction={async () => {
                     await closeMainWindow();
                     run(`code ${shellEscape(fullPath)}`);
@@ -151,7 +157,7 @@ export default function Command() {
                 <Action.CopyToClipboard
                   title="Copy Path"
                   content={fullPath}
-                  shortcut={{ modifiers: ["cmd", "shift"], key: "c" }}
+                  shortcut={Keyboard.Shortcut.Common.Copy}
                 />
               </ActionPanel>
             }
