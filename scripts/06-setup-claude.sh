@@ -11,9 +11,9 @@ if [[ ! -f "$BASE" ]]; then
 fi
 
 if [[ -f "$OUT" ]]; then
-  merged=$(jq -s '.[0] * .[1]' "$OUT" "$BASE")
+  merged=$(yq -o json -I 2 ea '. as $item ireduce({}; . *d $item)' "$OUT" "$BASE")
   echo "$merged" > "$OUT"
-  echo "Merged settings.base.json into settings.json"
+  echo "Deep-merged settings.base.json into settings.json"
 else
   cp "$BASE" "$OUT"
   echo "Copied settings.base.json -> settings.json"
