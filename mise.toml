@@ -23,23 +23,29 @@
 
 # Casks
 "brew-cask:claude" = "latest"
-"brew-cask:claude-code" = "latest"
+"brew-cask:claude-code@latest" = "latest"
 "brew-cask:dash@6" = "latest"
 "brew-cask:discord" = "latest"
 "brew-cask:dropbox" = "latest"
+"brew-cask:firefox" = "latest"
+"brew-cask:ghostty" = "latest"
 "brew-cask:font-hackgen-nerd" = "latest"
 "brew-cask:font-jetbrains-mono-nerd-font" = "latest"
 "brew-cask:font-ubuntu-mono-nerd-font" = "latest"
+"brew-cask:google-drive" = "latest"
+"brew-cask:google-japanese-ime" = "latest"
 "brew-cask:iterm2" = "latest"
 "brew-cask:notion" = "latest"
 "brew-cask:postman" = "latest"
 "brew-cask:rancher" = "latest"
+"brew-cask:raycast" = "latest"
 "brew-cask:sequel-ace" = "latest"
 "brew-cask:session-manager-plugin" = "latest"
 "brew-cask:slack" = "latest"
 "brew-cask:slack-cli" = "latest"
 "brew-cask:tableplus" = "latest"
 "brew-cask:visual-studio-code" = "latest"
+"brew-cask:zoom" = "latest"
 
 # ログインシェル（/etc/shells への登録と chsh を冪等に行う）
 [bootstrap.user]

@@ -40,7 +40,6 @@ tfupdate = "latest"
 # CI / Lint
 act = "latest"
 actionlint = "latest"
-gitleaks = "latest"
 hadolint = "latest"
 pinact = "latest"
 shellcheck = "latest"
@@ -50,6 +49,7 @@ zizmor = "latest"
 delta = "latest"
 gh = "latest"
 ghq = "latest"
+gitleaks = "latest"
 lazygit = "latest"
 
 # Terminal environment
