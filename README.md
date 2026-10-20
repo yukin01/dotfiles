@@ -24,7 +24,7 @@ $ bash -c "$(curl -fsSL dot.yukin01.dev)"
 
 ### SSH
 
-Generate SSH key pair.
+Generate SSH key pair (generation only — registration to GitHub is done later by `05-setup-tools.sh` via gh CLI).
 
 ```bash
 $ ./scripts/01-setup-ssh.sh
@@ -33,7 +33,7 @@ $ ./scripts/01-setup-ssh.sh
 
 ### Git
 
-Configure git remote repo.
+Check git identity.
 
 ```bash
 $ ./scripts/02-setup-git.sh
@@ -53,10 +53,17 @@ For `kubectl`, don't enable *Docker for Mac*'s k8s option before installing *Min
 
 ### Tools
 
+`05-setup-tools.sh` logs in to GitHub via gh CLI, uploads the SSH key (authentication & signing),
+registers github.com host keys to `known_hosts`, and switches the dotfiles remote to SSH.
+
 ```bash
 $ ./scripts/04-setup-mise.sh
 $ ./scripts/05-setup-tools.sh
 ```
+
+> [!NOTE]
+> mise の `github:` backend は未認証の GitHub API を叩くためレートリミットに当たることがある。
+> gh ログイン後の再実行では `GITHUB_TOKEN=$(gh auth token) mise install` で回避できる。
 
 ### Claude Code
 

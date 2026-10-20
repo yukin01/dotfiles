@@ -10,8 +10,8 @@ build:
 local:
 	docker run -it --rm \
 		-v $(HOME)/dotfiles:/home/ubuntu/tmp/dotfiles:ro \
-		-v $(HOME)/.ssh/id_rsa:/home/ubuntu/id_rsa_tmp:ro \
-		-e GIT_SSH_COMMAND="ssh -i /home/ubuntu/id_rsa_tmp" \
+		-v $(HOME)/.ssh/id_ed25519:/home/ubuntu/id_ed25519_tmp:ro \
+		-e GIT_SSH_COMMAND="ssh -i /home/ubuntu/id_ed25519_tmp" \
 		$(IMAGE)
 
 test:

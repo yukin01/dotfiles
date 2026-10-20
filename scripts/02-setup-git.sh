@@ -29,18 +29,8 @@ echo "    git config --global user.name your_name"
 echo "    git config --global user.email your_email"
 echo ""
 
-echo ""
-echo "===== Set git remote repository ====="
-echo ""
-
-if [[ -d "$HOME/dotfiles" ]]; then
-  cd "$HOME/dotfiles"
-  set -x
-  git remote set-url origin git@github.com:yukin01/dotfiles.git
-  git remote -v
-  git fetch
-  { set +x; } 2>/dev/null
-fi
+# NOTE: dotfiles の remote を SSH に切り替える処理は、鍵の登録 (gh CLI) 後で
+# ないと fetch が失敗するため 05-setup-tools.sh に移動した
 
 echo ""
 echo "🎉 Git is configured successfully."

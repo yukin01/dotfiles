@@ -53,6 +53,10 @@ else
     echo "  UseKeychain yes" >> ~/.ssh/config
     { set +x; } 2>/dev/null
   fi
+
+  set -x
+  chmod 600 "$HOME/.ssh/config"
+  { set +x; } 2>/dev/null
 fi
 
 echo ""
@@ -60,23 +64,17 @@ echo "===== Generate SSH key ====="
 echo ""
 
 if [[ -f "$HOME/.ssh/id_ed25519" ]] && [[ -f "$HOME/.ssh/id_ed25519.pub" ]]; then
-  echo "SSH key pair already exists. Skip generating key pair and copy public key."
-  [[ "$(uname)" == "Darwin" ]] && pbcopy < "$HOME/.ssh/id_ed25519.pub"
+  echo "SSH key pair already exists. Skip generating key pair."
 else
   read -r -p "Enter your email address: " email
   echo ""
 
   set -x
-  ssh-keygen -t ed25519 -C "${email}"
+  ssh-keygen -t ed25519 -C "${email}" -f "$HOME/.ssh/id_ed25519"
   { set +x; } 2>/dev/null
 
   echo ""
-  echo "Your public key is..."
-  echo ""
-  cat "$HOME/.ssh/id_ed25519.pub"
-  [[ "$(uname)" == "Darwin" ]] && pbcopy < "$HOME/.ssh/id_ed25519.pub"
-  echo ""
-  read -r -p "After registering authentication key and signing key, press the enter key: "
+  echo "Registration to GitHub (authentication & signing) is handled later by 05-setup-tools.sh via gh CLI."
 fi
 
 echo ""
