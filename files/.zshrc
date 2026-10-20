@@ -47,3 +47,6 @@ fi
 # For fzf key-bindings
 # this should be sourced after `bindkey -v`
 has "fzf" && source <(fzf --zsh)
+
+# bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
