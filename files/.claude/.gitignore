@@ -6,3 +6,7 @@
 !hooks
 hooks/*
 !hooks/herdr-claude-title
+!skills
+skills/*
+!skills/spawn
+!skills/spawn/**

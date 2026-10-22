@@ -9,45 +9,122 @@ set -euo pipefail
 #   │ shell           0.3          │                       │
 #   └──────────────────────────────┴───────────────────────┘
 #
-# usage: herdr-open [-w [branch]] [path] [label]
-#   path:   対象ディレクトリ (省略時: アクティブペインの cwd → $PWD)
-#   label:  workspace 名 (省略時: path の basename)
-#   -w:     path のリポジトリから git worktree を作り、専用 workspace にレイアウトを開く。
-#           branch 省略時は対話プロンプトで入力 (herdr の type=pane コマンド向け)。
+# usage: herdr-open [-n name] [-p prompt] [-f session-id] [--no-focus] [-w [branch]] [path] [label]
+#   path:       対象ディレクトリ (省略時: アクティブペインの cwd → $PWD)
+#   label:      workspace 名 (省略時: path の basename)
+#   -w:         path のリポジトリから git worktree を作り、専用 workspace にレイアウトを開く。
+#               branch 省略時は対話プロンプトで入力 (herdr の type=pane コマンド向け)。
+#   -n:         claude を herdr agent として名前付きで起動する (agent wait/read の対象にできる)
+#   -p:         起動した claude に最初のプロンプトを送る (-n 省略時は branch/label から名前を作る)
+#   -f:         指定した Claude Code セッションを fork して会話の文脈を引き継ぐ (-n 省略時は -p と同様に名前を作る)。
+#               同一リポジトリの worktree からの fork で動作確認済み (別リポジトリからは未確認)
+#   --no-focus: 作成した workspace/tab に画面を切り替えない
 #
 # worktree モード以外の挙動:
 #   herdr 内部 (カスタムコマンド or 管理下シェル) なら現在の workspace に新しいタブを追加。
 #   herdr 外部なら label が一致する既存 workspace に focus、なければ workspace を新規作成。
+#   (既存 workspace に focus する場合は -n/-p/--no-focus を無視する)
 
 # herdr の shell コマンドは非ログインシェルで走る可能性があるため PATH を補う
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 
 WORKTREE=""
 BRANCH=""
-if [ "${1:-}" = "-w" ]; then
-  WORKTREE=1
-  shift
-  # 次の引数が既存パスでなければ branch 名とみなす
-  if [ $# -gt 0 ] && [ ! -d "$1" ]; then
-    BRANCH="$1"
-    shift
-  fi
-fi
+NAME=""
+PROMPT=""
+FORK=""
+FOCUS="--focus"
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -n) NAME="$2"; shift 2 ;;
+    -p) PROMPT="$2"; shift 2 ;;
+    -f) FORK="$2"; shift 2 ;;
+    --no-focus) FOCUS="--no-focus"; shift ;;
+    -w)
+      WORKTREE=1
+      shift
+      # 次の引数がオプションでも既存パスでもなければ branch 名とみなす
+      if [ $# -gt 0 ] && [[ "$1" != -* ]] && [ ! -d "$1" ]; then
+        BRANCH="$1"
+        shift
+      fi
+      ;;
+    --) shift; break ;;
+    -*) echo "unknown option: $1" >&2; exit 2 ;;
+    *) break ;;
+  esac
+done
 
 CWD="${1:-${HERDR_ACTIVE_PANE_CWD:-$PWD}}"
 CWD=$(cd "$CWD" && pwd)
 LABEL="${2:-$(basename "$CWD")}"
 
-build_layout() {
+# herdr の agent 名の制約 [a-z][a-z0-9_-]{0,31} に合わせる
+function to_agent_name() {
+  local name
+  name=$(tr '[:upper:]' '[:lower:]' <<<"$1" | sed -E 's/[^a-z0-9_-]+/-/g; s/^[^a-z]+//')
+  printf '%s' "${name:0:32}"
+}
+
+function start_claude() {
+  local pane=$1 i
+
+  if [ -z "$NAME" ]; then
+    herdr pane run "$pane" claude
+    return
+  fi
+
+  # 分割直後のペインはシェルがまだプロンプトを出していないことがあるため、少し待って再試行する
+  local err code args=()
+  [ -z "$FORK" ] || args=(-- --resume "$FORK" --fork-session)
+  for i in $(seq 1 20); do
+    if err=$(herdr agent start "$NAME" --kind claude --pane "$pane" "${args[@]+"${args[@]}"}" 2>&1 >/dev/null); then
+      break
+    fi
+    code=$(jq -r '.error.code // empty' <<<"$err" 2>/dev/null || true)
+    case "$code" in
+      agent_not_ready)
+        # 起動時の確認ダイアログ (フォルダの trust など) で止まっている。人の承認を待ってからプロンプトを送る
+        echo "agent $NAME is waiting for approval in workspace ${pane%%:*} (pane $pane); approve it in herdr (timeout 5m)" >&2
+        if ! herdr agent wait "$NAME" --until idle --timeout 300000 >/dev/null; then
+          echo "agent $NAME did not become ready; the prompt was not sent" >&2
+          return 1
+        fi
+        break
+        ;;
+      agent_name_taken)
+        echo "$err" >&2
+        return 1
+        ;;
+    esac
+    if [ "$i" -eq 20 ]; then
+      echo "$err" >&2
+      return 1
+    fi
+    sleep 0.5
+  done
+
+  # プロンプトは引数ではなく agent prompt で送る (クォートや macOS の行長制限を避けるため)
+  if [ -n "$PROMPT" ]; then
+    herdr agent prompt "$NAME" "$PROMPT" >/dev/null
+  fi
+}
+
+function build_layout() {
   local root=$1 cwd=$2 claude
-  claude=$(herdr pane split "$root" --direction right --ratio 0.55 --cwd "$cwd" --focus | jq -r '.result.pane.pane_id')
+  claude=$(herdr pane split "$root" --direction right --ratio 0.55 --cwd "$cwd" "$FOCUS" | jq -r '.result.pane.pane_id')
   herdr pane split "$root" --direction down --ratio 0.7 --cwd "$cwd" --no-focus >/dev/null
 
   herdr pane rename "$root" nvim >/dev/null
   herdr pane run "$root" nvim
 
   herdr pane rename "$claude" claude >/dev/null
-  herdr pane run "$claude" claude
+  start_claude "$claude"
+
+  if [ -n "$NAME" ]; then
+    echo "agent: $NAME"
+    echo "cwd:   $cwd"
+  fi
 }
 
 if [ -n "$WORKTREE" ]; then
@@ -56,7 +133,22 @@ if [ -n "$WORKTREE" ]; then
     read -r BRANCH
     [ -n "$BRANCH" ] || exit 1
   fi
+fi
 
+if { [ -n "$PROMPT" ] || [ -n "$FORK" ]; } && [ -z "$NAME" ]; then
+  NAME=$(to_agent_name "${BRANCH:-$LABEL}")
+fi
+if [ -n "$NAME" ] && ! [[ "$NAME" =~ ^[a-z][a-z0-9_-]{0,31}$ ]]; then
+  echo "invalid agent name: $NAME (must match [a-z][a-z0-9_-]{0,31})" >&2
+  exit 2
+fi
+# worktree などを作ってから名前の衝突で失敗しないよう、先に確認する
+if [ -n "$NAME" ] && herdr agent get "$NAME" >/dev/null 2>&1; then
+  echo "agent name already in use: $NAME (pass another name with -n)" >&2
+  exit 1
+fi
+
+if [ -n "$WORKTREE" ]; then
   # origin があれば最新の default branch を fetch して分岐元にする
   base_args=()
   if git -C "$CWD" remote get-url origin >/dev/null 2>&1; then
@@ -73,7 +165,7 @@ if [ -n "$WORKTREE" ]; then
     fi
   fi
 
-  result=$(herdr worktree create --cwd "$CWD" --branch "$BRANCH" "${base_args[@]+"${base_args[@]}"}" --focus --json)
+  result=$(herdr worktree create --cwd "$CWD" --branch "$BRANCH" "${base_args[@]+"${base_args[@]}"}" "$FOCUS" --json)
   root=$(jq -r '.result.root_pane.pane_id' <<<"$result")
   wt_cwd=$(jq -r '.result.root_pane.cwd' <<<"$result")
 
@@ -87,7 +179,7 @@ fi
 WS="${HERDR_ACTIVE_WORKSPACE_ID:-${HERDR_WORKSPACE_ID:-}}"
 
 if [ -n "$WS" ]; then
-  root=$(herdr tab create --workspace "$WS" --cwd "$CWD" --focus | jq -r '.result.root_pane.pane_id')
+  root=$(herdr tab create --workspace "$WS" --cwd "$CWD" "$FOCUS" | jq -r '.result.root_pane.pane_id')
   build_layout "$root" "$CWD"
   exit 0
 fi
@@ -98,6 +190,6 @@ if [ -n "$existing" ]; then
   exit 0
 fi
 
-ws_id=$(herdr workspace create --cwd "$CWD" --label "$LABEL" | jq -r '.result.workspace.workspace_id')
+ws_id=$(herdr workspace create --cwd "$CWD" --label "$LABEL" "$FOCUS" | jq -r '.result.workspace.workspace_id')
 root=$(herdr pane list --workspace "$ws_id" | jq -r '.result.panes[0].pane_id')
 build_layout "$root" "$CWD"
