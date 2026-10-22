@@ -29,16 +29,26 @@ ok "main is up to date"
 info "Fetching & pruning"
 git fetch --prune --quiet
 
-gone_branches=$(git branch -vv | grep ': gone]' | awk '{print $1}') || true
+# git branch -vv は他 worktree でチェックアウト中のブランチに "+" を付けるため、
+# for-each-ref でブランチ名と upstream 状態を直接取得する
+gone_branches=$(git for-each-ref --format='%(refname:short) %(upstream:track)' refs/heads \
+  | awk '$2 == "[gone]" {print $1}') || true
+
+# 他 worktree でチェックアウト中のブランチは削除できないためスキップする
+worktree_branches=$(git worktree list --porcelain | sed -n 's|^branch refs/heads/||p')
 
 if [[ -z "$gone_branches" ]]; then
   ok "No stale branches"
 else
   count=0
   while IFS= read -r branch; do
+    if grep -qxF "$branch" <<< "$worktree_branches"; then
+      warn "Skipped $branch (checked out in a worktree)"
+      continue
+    fi
     if git branch -D "$branch" >/dev/null 2>&1; then
       printf "  ${dim}deleted${reset} %s\n" "$branch"
-      ((count++))
+      count=$((count + 1))
     else
       warn "Failed to delete $branch"
     fi
