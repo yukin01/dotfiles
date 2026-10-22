@@ -14,6 +14,8 @@
 "brew:htop" = "latest"
 "brew:httping" = "latest"
 "brew:nmap" = "latest"
+# 上流の macOS バイナリ (mise/aqua) は Homebrew の openssl@3 に動的リンクしており、prune で壊れるため brew で管理する
+"brew:sheldon" = "latest"
 "brew:tig" = "latest"
 "brew:tmux" = "latest"
 "brew:tree" = "latest"

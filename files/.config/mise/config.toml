@@ -58,7 +58,6 @@ lazygit = "latest"
 direnv = "latest"
 herdr = "latest"
 neovim = "latest"
-sheldon = "latest"
 starship = "latest"
 
 # CLI utilities
