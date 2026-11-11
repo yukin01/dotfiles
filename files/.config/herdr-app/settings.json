@@ -1,0 +1,12 @@
+{
+  "zoom": 1.2,
+  "sounds": {
+    "enabled": true
+  },
+  "font_size": 12,
+  "font_ligatures": false,
+  "minimum_contrast": 1,
+  "appearance": "dark",
+  "telemetry": false,
+  "theme": "dracula"
+}

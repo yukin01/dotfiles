@@ -36,6 +36,7 @@
 "brew-cask:font-ubuntu-mono-nerd-font" = "latest"
 "brew-cask:google-drive" = "latest"
 "brew-cask:google-japanese-ime" = "latest"
+"brew-cask:herdr-app" = "latest"
 "brew-cask:iterm2" = "latest"
 "brew-cask:notion" = "latest"
 "brew-cask:postman" = "latest"

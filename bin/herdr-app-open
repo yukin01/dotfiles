@@ -1,0 +1,84 @@
+#!/bin/bash
+set -euo pipefail
+
+# herdr-app で path の space を開く。既にあればそこへ移動し、なければ claude/shell の space を作る
+#
+#   ┌──────────────────────────────┐
+#   │ claude (focused)   0.7       │
+#   ├──────────────────────────────┤
+#   │ shell              0.3       │
+#   └──────────────────────────────┘
+#   (右側に Files パネル)
+#
+# usage: herdr-app-open [path]
+#   path: 対象ディレクトリ (省略時: $PWD)
+#
+# 既存 space の判定は space の作成時フォルダ (folder) が path と一致するかで行う。
+# herdr-app の space 名はリポジトリ名に追従するだけで一意ではないため名前では探さない。
+# このスクリプト以外で作った space (ホームで作って cd したもの等) は一致せず、新しく作る。
+
+# Raycast など非ログインシェルから呼ばれても見つかるよう PATH を補う
+export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
+
+CWD="${1:-$PWD}"
+CWD=$(cd "$CWD" && pwd -P)
+
+function app() {
+  herdr-app "$@"
+}
+
+# ウィンドウが無ければ起動して応答を待つ
+if ! app ls >/dev/null 2>&1; then
+  open -a Herdr
+  for _ in {1..40}; do
+    app ls >/dev/null 2>&1 && break
+    sleep 0.25
+  done
+fi
+
+existing=$(app ls | jq -r --arg f "$CWD" '[.spaces[] | select(.machine == null and .folder == $f) | .id] | first // empty')
+if [ -n "$existing" ]; then
+  app do space.select --id "$existing" >/dev/null
+  open -a Herdr
+  exit 0
+fi
+
+created=$(app do space.new --folder "$CWD" --argv '["claude"]')
+tab=$(jq -r '.tab // empty' <<<"$created")
+if [ -z "$tab" ]; then
+  echo "space.new failed: $created" >&2
+  exit 1
+fi
+# space.new は pane ID を返さないため、作られたタブから引く
+claude=$(app ls | jq -r --arg t "$tab" '[.spaces[].tabs[] | select(.id == $t) | .terminals[0].pane] | first // empty')
+
+shell=$(app do pane.split --pane "$claude" --direction down | jq -r '.pane // empty')
+# pane.split に比率指定がないため weight を後から決める
+if [ -n "$shell" ]; then
+  app do layout.resize --id "$claude" --weight 0.7 >/dev/null
+  app do layout.resize --id "$shell" --weight 0.3 >/dev/null
+fi
+app do pane.focus --pane "$claude" >/dev/null
+
+# Files パネルを開く。開閉は tabs mod が space ごとに記憶し、初めて見る space では閉じる。
+# tabs mod がいつ space の切り替えを処理するか (ウィンドウが裏にあると遅れる) は外から分からないため、
+# パネルの状態を見て、閉じられていたら開き直す。tabs mod は切り替え後 1 秒間は再度閉じないので、
+# 開いた状態が 1.5 秒続けば確定とみなす
+open -a Herdr
+STATE="$HOME/.config/herdr-app/layouts/.state/main.json"
+function files_shown() {
+  # キーが無いときはレイアウト既定 (panel は非表示、panel-body は files) に戻っている
+  jq -e '.nodes.panel.hidden == false and ((.nodes["panel-body"].active // "files") == "files")' "$STATE" >/dev/null 2>&1
+}
+stable=0
+for _ in {1..30}; do
+  if files_shown; then
+    stable=$((stable + 1))
+    [ "$stable" -ge 6 ] && break
+  else
+    stable=0
+    app do layout.select --stack panel-body --child files >/dev/null
+    app do layout.show --id panel >/dev/null
+  fi
+  sleep 0.25
+done

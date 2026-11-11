@@ -15,6 +15,16 @@
 !cmux/sidebars/**
 !cmux/README.md
 !herdr/config.toml
+!herdr-app/
+!herdr-app/keys.json
+!herdr-app/settings.json
+!herdr-app/themes/
+!herdr-app/themes/dracula.json
+!herdr-app/mods/
+!herdr-app/mods/kb-*/
+!herdr-app/mods/kb-*/main.js
+!herdr-app/mods/kb-*/mod.json
+!herdr-app/mods/kb-*/split.js
 !yazi/yazi.toml
 !lazygit/config.yml
 !nvim/**
