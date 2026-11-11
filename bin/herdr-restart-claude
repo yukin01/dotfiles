@@ -1,0 +1,101 @@
+#!/bin/bash
+set -uo pipefail
+
+# herdr 上の Claude Code セッションを /exit → claude --resume <session-id> で順に再起動する
+# (claude 本体を更新したあと、各セッションに新しいバージョンを反映させる用途)
+#
+# usage: herdr-restart-claude [pane-id ...]
+#   pane-id 省略時: 呼び出し元ペインを除く全 claude agent
+#
+# --continue ではなく --resume <id> を使うのは、同じ cwd に複数セッションがあると
+# --continue が別の会話を開いてしまうため。
+# 次のセッションは触らずにスキップする:
+#   - idle/done 以外 (作業中・承認待ちなど)
+#   - 入力欄に下書きがある (/exit が下書きに連結されて普通のメッセージとして送られるため)
+#   - /exit で "Background work is running" が出る (Esc で取り消す)
+
+# herdr の shell コマンドは非ログインシェルで走る可能性があるため PATH を補う
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+
+green='\033[32m'
+yellow='\033[33m'
+red='\033[31m'
+reset='\033[0m'
+
+function ok()   { printf "${green}✓${reset} %s\n" "$1"; }
+function skip() { printf "${yellow}-${reset} %s\n" "$1"; }
+function err()  { printf "${red}✗${reset} %s\n" "$1" >&2; }
+
+function agent_alive() {
+  herdr agent get "$1" >/dev/null 2>&1
+}
+
+# 入力欄 (画面内で最後の ❯ 行) が空か。全角スペースだけの行も下書きとみなす
+function input_is_empty() {
+  local line
+  line=$(herdr pane read "$1" --source visible --lines 30 | grep '^❯' | tail -1)
+  [[ "$line" == "❯" || "$line" == "❯ " ]]
+}
+
+function restart() {
+  local pane=$1 info sid status name i
+  if ! info=$(herdr agent get "$pane" 2>/dev/null); then
+    skip "$pane: agent がいない"; return 1
+  fi
+  if [[ $(jq -r '.result.agent.agent' <<<"$info") != claude ]]; then
+    skip "$pane: claude ではない"; return 1
+  fi
+  sid=$(jq -r '.result.agent.agent_session.value' <<<"$info")
+  status=$(jq -r '.result.agent.agent_status' <<<"$info")
+  name=$(jq -r '.result.agent.name // empty' <<<"$info")
+
+  if [[ "$status" != idle && "$status" != "done" ]]; then
+    skip "$pane: $status"; return 1
+  fi
+  if ! input_is_empty "$pane"; then
+    skip "$pane: 入力欄が空でない (下書き or 別画面)"; return 1
+  fi
+
+  herdr agent prompt "$pane" "/exit" >/dev/null || { err "$pane: /exit の送信に失敗"; return 1; }
+  for ((i = 0; i < 60; i++)); do
+    agent_alive "$pane" || break
+    if herdr pane read "$pane" --source visible --lines 20 | grep -q 'Background work is running'; then
+      herdr agent send-keys "$pane" esc >/dev/null
+      skip "$pane: background work 実行中"; return 1
+    fi
+    sleep 1
+  done
+  if agent_alive "$pane"; then
+    err "$pane: /exit 後も終了しない"; return 1
+  fi
+  sleep 1
+
+  # 名前付き agent は名前を引き継ぐため agent start で起動する
+  if [[ -n "$name" ]]; then
+    herdr agent start "$name" --kind claude --pane "$pane" --timeout 120000 -- --resume "$sid" >/dev/null
+  else
+    herdr pane run "$pane" "claude --resume $sid" >/dev/null
+    for ((i = 0; i < 120; i++)); do
+      agent_alive "$pane" && break
+      sleep 1
+    done
+  fi
+  if agent_alive "$pane"; then
+    ok "$pane: 再起動 ($sid)"
+  else
+    err "$pane: 起動に失敗 (claude --resume $sid)"; return 1
+  fi
+}
+
+if [[ $# -gt 0 ]]; then
+  panes=("$@")
+else
+  panes=()
+  while IFS= read -r p; do panes+=("$p"); done < <(herdr agent list \
+    | jq -r --arg self "${HERDR_PANE_ID:-}" '.result.agents[] | select(.agent == "claude" and .pane_id != $self) | .pane_id')
+fi
+
+for pane in "${panes[@]}"; do
+  restart "$pane"
+done
+exit 0
