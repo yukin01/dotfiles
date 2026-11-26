@@ -15,6 +15,7 @@
 !cmux/sidebars/**
 !cmux/README.md
 !herdr/config.toml
+!hunk/config.toml
 !herdr-app/
 !herdr-app/keys.json
 !herdr-app/settings.json

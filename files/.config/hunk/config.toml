@@ -1,0 +1,4 @@
+mode = "auto"
+sidebar = "auto"
+wrap_lines = true
+watch = true
