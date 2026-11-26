@@ -10,15 +10,39 @@ set -euo pipefail
 #   └──────────────────────────────┘
 #   (右側に Files パネル)
 #
-# usage: herdr-app-open [path]
-#   path: 対象ディレクトリ (省略時: $PWD)
+# usage: herdr-app-open [-p prompt] [-f session-id] [--no-focus] [-w branch] [path]
+#   path:       対象ディレクトリ (省略時: $PWD)
+#   -w:         path のリポジトリから git worktree を作り、その space を開く。
+#               置き場所は herdr-app の worktree ダイアログと同じ ~/.herdr/worktrees/<repo>/<branch>
+#   -p:         起動した claude に最初のプロンプトを送る
+#   -f:         指定した Claude Code セッションを fork して会話の文脈を引き継ぐ
+#   --no-focus: 作った space を表示したままにせず、元の space に戻す (Files パネルは開かない)
+#
+# 新しく作ったときは space / terminal (hc のアドレス) / cwd を出力する。
+# claude が確認ダイアログ (フォルダの trust など) で止まったら、その旨を出力して終わる。
 #
 # 既存 space の判定は space の作成時フォルダ (folder) が path と一致するかで行う。
 # herdr-app の space 名はリポジトリ名に追従するだけで一意ではないため名前では探さない。
 # このスクリプト以外で作った space (ホームで作って cd したもの等) は一致せず、新しく作る。
+# -p / -f のときは別の会話を始めるため、既存 space があっても新しく作る。
 
 # Raycast など非ログインシェルから呼ばれても見つかるよう PATH を補う
 export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
+
+BRANCH=""
+PROMPT=""
+FORK=""
+FOCUS=1
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -w) BRANCH="$2"; shift 2 ;;
+    -p) PROMPT="$2"; shift 2 ;;
+    -f) FORK="$2"; shift 2 ;;
+    --no-focus) FOCUS=0; shift ;;
+    -*) echo "unknown option: $1" >&2; exit 1 ;;
+    *) break ;;
+  esac
+done
 
 CWD="${1:-$PWD}"
 CWD=$(cd "$CWD" && pwd -P)
@@ -36,19 +60,64 @@ if ! app ls >/dev/null 2>&1; then
   done
 fi
 
-existing=$(app ls | jq -r --arg f "$CWD" '[.spaces[] | select(.machine == null and .folder == $f) | .id] | first // empty')
-if [ -n "$existing" ]; then
-  app do space.select --id "$existing" >/dev/null
-  open -a Herdr
-  exit 0
+if [ -z "$BRANCH" ] && [ -z "$PROMPT" ] && [ -z "$FORK" ]; then
+  existing=$(app ls | jq -r --arg f "$CWD" '[.spaces[] | select(.machine == null and .folder == $f) | .id] | first // empty')
+  if [ -n "$existing" ]; then
+    app do space.select --id "$existing" >/dev/null
+    [ "$FOCUS" = 1 ] && open -a Herdr
+    exit 0
+  fi
 fi
 
-created=$(app do space.new --folder "$CWD" --argv '["claude"]')
+if [ -n "$BRANCH" ]; then
+  # herdr-app の worktree ダイアログ (kb-worktree) と同じ規則で置くと、Remove worktree などで同じように扱える
+  main=$(git -C "$CWD" worktree list --porcelain | sed -n '1s/^worktree //p')
+  slug=$(sed -E 's/[^A-Za-z0-9._-]+/-/g; s/^-+//; s/-+$//' <<<"$BRANCH")
+  wt="$HOME/.herdr/worktrees/$(basename "$main")/$slug"
+
+  # origin があれば最新の default branch を fetch して分岐元にする
+  base=HEAD
+  if git -C "$CWD" remote get-url origin >/dev/null 2>&1; then
+    default=$(git -C "$CWD" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | cut -d/ -f2-)
+    if [ -z "$default" ]; then
+      for c in main master; do
+        git -C "$CWD" show-ref --verify -q "refs/remotes/origin/$c" && { default=$c; break; }
+      done
+    fi
+    if [ -n "$default" ]; then
+      echo "fetching origin/$default..." >&2
+      git -C "$CWD" fetch origin "$default" --quiet || true
+      base="origin/$default"
+    fi
+  fi
+
+  if git -C "$CWD" show-ref --verify -q "refs/heads/$BRANCH"; then
+    git -C "$CWD" worktree add "$wt" "$BRANCH" >&2
+  else
+    git -C "$CWD" worktree add -b "$BRANCH" "$wt" "$base" >&2
+    # リモート追跡ブランチ起点だと upstream が origin/main になってしまうので外す
+    git -C "$wt" branch --unset-upstream 2>/dev/null || true
+  fi
+  CWD="$wt"
+fi
+
+argv=(claude)
+[ -z "$FORK" ] || argv+=(--resume "$FORK" --fork-session)
+args=$(jq -n --arg folder "$CWD" --arg task "$PROMPT" '$ARGS.positional as $argv
+  | {folder: $folder, argv: $argv} + (if $task == "" then {} else {task: $task} end)' --args "${argv[@]}")
+
+prev=$(app status | jq -r '.space // empty')
+created=$(app do space.new "$args")
+space=$(jq -r '.space // empty' <<<"$created")
 tab=$(jq -r '.tab // empty' <<<"$created")
+terminal=$(jq -r '.terminal // empty' <<<"$created")
 if [ -z "$tab" ]; then
   echo "space.new failed: $created" >&2
   exit 1
 fi
+# space.new は作った space を必ず表示するため、すぐ元に戻して画面が切り替わる時間を短くする
+[ "$FOCUS" = 0 ] && [ -n "$prev" ] && app do space.select --id "$prev" >/dev/null
+
 # space.new は pane ID を返さないため、作られたタブから引く
 claude=$(app ls | jq -r --arg t "$tab" '[.spaces[].tabs[] | select(.id == $t) | .terminals[0].pane] | first // empty')
 
@@ -59,26 +128,47 @@ if [ -n "$shell" ]; then
   app do layout.resize --id "$shell" --weight 0.3 >/dev/null
 fi
 app do pane.focus --pane "$claude" >/dev/null
+# pane.split / pane.focus が表示中の space を切り替えることがあるため、もう一度戻す
+[ "$FOCUS" = 0 ] && [ -n "$prev" ] && app do space.select --id "$prev" >/dev/null
+
+echo "space: $space"
+echo "terminal: $terminal"
+echo "cwd: $CWD"
 
 # Files パネルを開く。開閉は tabs mod が space ごとに記憶し、初めて見る space では閉じる。
 # tabs mod がいつ space の切り替えを処理するか (ウィンドウが裏にあると遅れる) は外から分からないため、
 # パネルの状態を見て、閉じられていたら開き直す。tabs mod は切り替え後 1 秒間は再度閉じないので、
-# 開いた状態が 1.5 秒続けば確定とみなす
-open -a Herdr
-STATE="$HOME/.config/herdr-app/layouts/.state/main.json"
-function files_shown() {
-  # キーが無いときはレイアウト既定 (panel は非表示、panel-body は files) に戻っている
-  jq -e '.nodes.panel.hidden == false and ((.nodes["panel-body"].active // "files") == "files")' "$STATE" >/dev/null 2>&1
-}
-stable=0
-for _ in {1..30}; do
-  if files_shown; then
-    stable=$((stable + 1))
-    [ "$stable" -ge 6 ] && break
-  else
-    stable=0
-    app do layout.select --stack panel-body --child files >/dev/null
-    app do layout.show --id panel >/dev/null
-  fi
-  sleep 0.25
-done
+# 開いた状態が 1.5 秒続けば確定とみなす。
+# 状態は表示中の space のものしか読めないため、--no-focus では開かない
+if [ "$FOCUS" = 1 ]; then
+  open -a Herdr
+  STATE="$HOME/.config/herdr-app/layouts/.state/$(app status | jq -r '.layout // "main"').json"
+  function files_shown() {
+    # キーが無いときはレイアウト既定 (panel は非表示、panel-body は files) に戻っている
+    jq -e '.nodes.panel.hidden == false and ((.nodes["panel-body"].active // "files") == "files")' "$STATE" >/dev/null 2>&1
+  }
+  stable=0
+  for _ in {1..30}; do
+    if files_shown; then
+      stable=$((stable + 1))
+      [ "$stable" -ge 6 ] && break
+    else
+      stable=0
+      app do layout.select --stack panel-body --child files >/dev/null
+      app do layout.show --id panel >/dev/null
+    fi
+    sleep 0.25
+  done
+fi
+
+# 起動時の確認ダイアログで止まっていないか確かめる。止まっていたら人に任せる
+if [ -n "$PROMPT" ] || [ -n "$FORK" ]; then
+  for _ in {1..40}; do
+    state=$(hc get "$terminal" --json 2>/dev/null | jq -r '.status.state // empty')
+    case "$state" in
+      blocked) echo "blocked: claude が確認待ち。Herdr で space を開いて承認してください"; exit 0 ;;
+      working | done) exit 0 ;;
+    esac
+    sleep 0.5
+  done
+fi

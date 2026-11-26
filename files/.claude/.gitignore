@@ -10,3 +10,5 @@ hooks/*
 skills/*
 !skills/spawn
 !skills/spawn/**
+!skills/herdr-app-spawn
+!skills/herdr-app-spawn/**

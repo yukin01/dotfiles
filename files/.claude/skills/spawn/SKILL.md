@@ -1,6 +1,6 @@
 ---
 name: spawn
-description: herdr 上に git worktree 付きの別 Claude Code セッションを立ち上げ、タスクのプロンプトを流し込んで並列に作業させる。「別セッションで〜して」「並列で〜やらせて」「worktree 切って claude に〜させて」「spawn して」など、ユーザーが別セッション・別 worktree への委譲を明示的に求めたときに使う。結果の回収 (「さっきの spawn の結果見て」) にも使う。単に作業が並列化できそうというだけでは使わない。Requires HERDR_ENV=1.
+description: herdr 上に git worktree 付きの別 Claude Code セッションを立ち上げ、タスクのプロンプトを流し込んで並列に作業させる。「別セッションで〜して」「並列で〜やらせて」「worktree 切って claude に〜させて」「spawn して」など、ユーザーが別セッション・別 worktree への委譲を明示的に求めたときに使う。結果の回収 (「さっきの spawn の結果見て」) にも使う。単に作業が並列化できそうというだけでは使わない。Requires HERDR_ENV=1 (herdr-app の中なら herdr-app-spawn スキルを使う).
 ---
 
 # spawn
@@ -15,7 +15,7 @@ description: herdr 上に git worktree 付きの別 Claude Code セッション�
 test "${HERDR_ENV:-}" = 1
 ```
 
-失敗したら「herdr の外で動いているので spawn できない」と伝えて止まる。
+失敗したら止まる。`HC_TERMINAL_ID` があれば「herdr-app の中なので herdr-app-spawn スキルを使う」、どちらでもなければ「herdr の外で動いているので spawn できない」と伝える。
 
 ## 起動
 
