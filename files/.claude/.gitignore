@@ -12,3 +12,5 @@ skills/*
 !skills/spawn/**
 !skills/herdr-app-spawn
 !skills/herdr-app-spawn/**
+!skills/herdr-app-hunk
+!skills/herdr-app-hunk/**

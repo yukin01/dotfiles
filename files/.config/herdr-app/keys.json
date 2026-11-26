@@ -68,7 +68,8 @@
     },
     "cmd-shift-t": "mod.open:kb-claude-shell-tab",
     "cmd-shift-n": "mod.open:kb-worktree-new",
-    "cmd-shift-x": "mod.open:kb-worktree-remove"
+    "cmd-shift-x": "mod.open:kb-worktree-remove",
+    "cmd-shift-h": "mod.open:kb-hunk"
   },
   "terminal": {
     "cmd-f": "terminal.search",

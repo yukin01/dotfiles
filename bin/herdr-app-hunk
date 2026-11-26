@@ -1,0 +1,66 @@
+#!/bin/bash
+set -euo pipefail
+
+# path の git リポジトリ (worktree) の、分岐元からの差分を herdr-app のタブで hunk に表示する
+#
+# usage: herdr-app-hunk [path]
+#   path: 対象ディレクトリ (省略時: $PWD)
+#
+# 分岐元は origin/HEAD、無ければ origin/main・origin/master との merge-base。
+# 分岐してからのコミットと未コミットの変更をまとめて見せるため、merge-base と作業ツリーを比べる。
+# どれも無ければ未コミットの変更だけ。origin は fetch しない (待たせないため。古ければ分岐元がずれるだけ)。
+#
+# 同じリポジトリの hunk が既に開いていれば、新しく開かずにそのタブを表示して差分を読み直す。
+# hunk のセッション (hunk session) が使えるようになるまで待ち、session id / repo / base を出力する。
+
+# Raycast や mod など非ログインシェルから呼ばれても見つかるよう PATH を補う
+export PATH="$HOME/.local/share/mise/shims:$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
+
+CWD="${1:-$PWD}"
+top=$(git -C "$CWD" rev-parse --show-toplevel)
+branch=$(git -C "$top" branch --show-current)
+
+base=$(git -C "$top" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || true)
+if [ -z "$base" ]; then
+  for c in origin/main origin/master; do
+    git -C "$top" rev-parse -q --verify "$c" >/dev/null && { base=$c; break; }
+  done
+fi
+diff=(diff)
+if [ -n "$base" ]; then
+  diff+=("$(git -C "$top" merge-base "$base" HEAD)")
+fi
+
+function sessions() {
+  hunk session list --json 2>/dev/null | jq -c --arg r "$top" '[.sessions[]? | select(.repoRoot == $r)]'
+}
+
+existing=$(sessions | jq -r '.[0] | select(.) | "\(.sessionId) \(.pid)"')
+if [ -n "$existing" ]; then
+  read -r id pid <<<"$existing"
+  # hunk のプロセスを前面で動かしている herdr-core のターミナルを探して表示する
+  terminal=$(hc ls --json | jq -r '.terminals[] | select(.state == "live") | .address' | while read -r t; do
+    hc get "$t" --json | jq -r --argjson p "$pid" 'select(.foreground.pid == $p) | .address'
+  done | head -1)
+  [ -n "$terminal" ] && herdr-app do terminal.show --terminal "$terminal" >/dev/null
+  hunk session reload "$id" -- "${diff[@]}" >/dev/null
+else
+  before=$(sessions | jq -r '.[].sessionId')
+  args=$(jq -n --arg folder "$top" --arg name "hunk ${branch:-$(basename "$top")}" \
+    '{argv: ["hunk"] + $ARGS.positional, folder: $folder, place: "tab", name: $name}' --args "${diff[@]}")
+  herdr-app do terminal.open "$args" >/dev/null
+  id=""
+  for _ in {1..40}; do
+    id=$(sessions | jq -r --arg before "$before" '[.[] | select(.sessionId as $s | $before | split("\n") | index($s) | not)][0].sessionId // empty')
+    [ -n "$id" ] && break
+    sleep 0.25
+  done
+  if [ -z "$id" ]; then
+    echo "hunk のセッションが見つからない (タブで hunk が起動できたか確認してください)" >&2
+    exit 1
+  fi
+fi
+
+echo "session: $id"
+echo "repo: $top"
+echo "base: ${base:-HEAD (uncommitted only)}"
