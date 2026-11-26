@@ -20,11 +20,14 @@
 !herdr-app/settings.json
 !herdr-app/themes/
 !herdr-app/themes/dracula.json
+!herdr-app/layouts/
+!herdr-app/layouts/kb-*.json
 !herdr-app/mods/
 !herdr-app/mods/kb-*/
 !herdr-app/mods/kb-*/main.js
 !herdr-app/mods/kb-*/mod.json
 !herdr-app/mods/kb-*/split.js
+!herdr-app/mods/kb-*/*.svg
 !yazi/yazi.toml
 !lazygit/config.yml
 !nvim/**
